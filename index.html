@@ -1,0 +1,1165 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>电力电子技术 · 刷题台</title>
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='7' fill='%230E4A7E'/%3E%3Cpath d='M18 5 9 18h6l-1 9 9-13h-6z' fill='%23F2A33C'/%3E%3C/svg%3E">
+<style>
+/* 电力电子技术 · 刷题台 样式 v2（工程·电路主题，移动优先） */
+:root{
+  --bg:#EEF2F7; --card:#FFFFFF; --ink:#12263A; --muted:#5E7387;
+  --line:#DCE4EE; --accent:#0E4A7E; --accent-soft:#E7F0F8;
+  --copper:#E89B2C; --copper-soft:#FBF0DE;
+  --wave:#2A9D8F;
+  --ok:#1B9E6A; --ok-soft:#E4F6EC; --bad:#D64545; --bad-soft:#FBE7E7;
+  --radius:14px; --shadow:0 2px 12px rgba(14,74,126,.08);
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html{-webkit-text-size-adjust:100%}
+body{
+  font-family:-apple-system,BlinkMacSystemFont,"Segoe UI","Microsoft YaHei","PingFang SC","Hiragino Sans GB",sans-serif;
+  background-color:var(--bg);
+  background-image:radial-gradient(rgba(14,74,126,.07) 1px, transparent 1.4px);
+  background-size:22px 22px;
+  color:var(--ink);font-size:15px;line-height:1.6;
+}
+button{font-family:inherit;cursor:pointer;border:none;background:none;color:inherit}
+input{font-family:inherit}
+a{text-decoration:none;color:inherit}
+.mono{font-family:ui-monospace,SFMono-Regular,Consolas,"Courier New",monospace}
+
+/* ---------- 头部 ---------- */
+.topbar{background:var(--accent);color:#fff;padding:12px 16px 12px;position:sticky;top:0;z-index:20}
+.topbar-in{max-width:960px;margin:0 auto;display:flex;align-items:center;gap:10px}
+.logo{width:34px;height:34px;flex:0 0 auto;background:rgba(255,255,255,.14);border-radius:9px;display:flex;align-items:center;justify-content:center;position:relative;overflow:hidden}
+.logo svg{width:20px;height:20px;position:relative;z-index:1}
+.logo::after{content:'';position:absolute;left:-40%;bottom:-70%;width:180%;height:120%;background:radial-gradient(circle at 50% 30%,rgba(242,163,60,.5),transparent 65%);}
+.top-title{font-size:16px;font-weight:700;line-height:1.2}
+.top-sub{font-size:11.5px;opacity:.78;margin-top:1px}
+.top-stat{margin-left:auto;text-align:right;font-size:11.5px;opacity:.9}
+.top-stat b{display:block;font-size:17px;font-weight:700;line-height:1.1}
+.word-btn{margin-left:2px;flex:0 0 auto;background:var(--copper);color:#fff;font-size:12.5px;font-weight:700;padding:8px 12px;border-radius:9px;display:inline-flex;align-items:center;gap:5px;box-shadow:0 2px 6px rgba(0,0,0,.15)}
+.word-btn:hover{background:#D8891A}
+.word-btn svg{width:14px;height:14px}
+
+/* ---------- Tab 导航 ---------- */
+.tabs{background:var(--card);border-bottom:1px solid var(--line);position:sticky;top:59px;z-index:19}
+.tabs-in{max-width:960px;margin:0 auto;display:flex;overflow-x:auto;scrollbar-width:none}
+.tabs-in::-webkit-scrollbar{display:none}
+.tab{flex:0 0 auto;padding:12px 14px;font-size:14px;color:var(--muted);border-bottom:2px solid transparent;white-space:nowrap;display:flex;align-items:center;gap:5px}
+.tab svg{width:16px;height:16px}
+.tab.on{color:var(--accent);border-bottom-color:var(--accent);font-weight:600}
+
+/* ---------- 主容器 ---------- */
+main{max-width:960px;margin:0 auto;padding:16px 16px 48px}
+.view{display:none}
+.view.on{display:block}
+.card{background:var(--card);border:1px solid var(--line);border-radius:var(--radius);box-shadow:var(--shadow);padding:18px;margin-bottom:14px}
+.card h2{font-size:16px;margin-bottom:8px}
+.hint{color:var(--muted);font-size:13px}
+
+/* ---------- 按钮 ---------- */
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:6px;padding:10px 16px;border-radius:10px;font-size:14px;font-weight:600;transition:background .15s,transform .1s}
+.btn:active{transform:scale(.97)}
+.btn-primary{background:var(--accent);color:#fff}
+.btn-primary:hover{background:#0C3F6B}
+.btn-amber{background:var(--copper);color:#fff}
+.btn-amber:hover{background:#D8891A}
+.btn-ghost{background:var(--accent-soft);color:var(--accent)}
+.btn-ghost:hover{background:#D8E9F7}
+.btn-line{border:1px solid var(--line);background:#fff;color:var(--ink)}
+.btn-line:hover{background:var(--bg)}
+.btn-sm{padding:7px 12px;font-size:13px;border-radius:8px}
+.btn-block{width:100%}
+.btn[disabled]{opacity:.5;pointer-events:none}
+
+/* ---------- 首页 ---------- */
+.hero{position:relative;overflow:hidden;background:linear-gradient(135deg,#0B3A5E 0%,#0E4A7E 55%,#16629F 100%);color:#fff;border-radius:var(--radius);padding:22px;margin-bottom:14px}
+.hero-wave{position:absolute;right:-30px;bottom:-18px;width:260px;height:120px;opacity:.32;pointer-events:none;z-index:0}
+.hero-wave svg{width:100%;height:100%}
+.hero>*{position:relative;z-index:1}
+.hero h1{font-size:22px;font-weight:800;letter-spacing:.5px}
+.hero p{font-size:13px;opacity:.88;margin-top:4px;max-width:520px}
+.hero-stats{display:flex;gap:26px;margin-top:16px;flex-wrap:wrap}
+.hero-stat b{display:block;font-size:26px;font-weight:800;line-height:1.1}
+.hero-stat span{font-size:12px;opacity:.8}
+.quick{display:grid;grid-template-columns:repeat(2,1fr);gap:10px;margin-bottom:14px}
+.quick .btn{padding:14px 10px;font-size:14px;border-radius:12px}
+.doc-card{display:flex;align-items:center;gap:12px;padding:14px 16px}
+.doc-card .icon-chip{flex:0 0 auto}
+.doc-card .doc-info{flex:1;min-width:0}
+.doc-card .doc-info b{display:block;font-size:14px}
+.doc-card .doc-info span{font-size:12px;color:var(--muted)}
+.chap-grid{display:grid;grid-template-columns:1fr;gap:10px}
+@media (min-width:768px){.chap-grid{grid-template-columns:repeat(2,1fr)}}
+.chap{display:flex;gap:12px;align-items:center;background:var(--card);border:1px solid var(--line);border-radius:12px;padding:12px 14px;cursor:pointer;transition:border-color .15s,box-shadow .15s,transform .12s}
+.chap:hover{border-color:var(--accent);box-shadow:var(--shadow);transform:translateY(-1px)}
+.icon-chip{width:42px;height:42px;flex:0 0 auto;border-radius:11px;display:flex;align-items:center;justify-content:center;color:var(--accent);background:var(--accent-soft)}
+.icon-chip.copper{background:var(--copper-soft);color:#B5750F}
+.icon-chip svg{width:22px;height:22px}
+.chap-main{flex:1;min-width:0}
+.chap-top{display:flex;align-items:center;justify-content:space-between;margin-bottom:6px}
+.chap-name{font-weight:700;font-size:14px}
+.chap-num{font-size:12px;color:var(--muted)}
+.chap-bar{height:6px;background:var(--line);border-radius:3px;overflow:hidden;margin-bottom:6px}
+.chap-bar i{display:block;height:100%;background:linear-gradient(90deg,var(--accent),#3B82C4);border-radius:3px}
+.chap-foot{display:flex;justify-content:space-between;font-size:12px;color:var(--muted)}
+.chap-foot b{color:var(--ink)}
+
+/* ---------- 知识框架 ---------- */
+.fw-toolbar{display:flex;align-items:center;gap:10px;flex-wrap:wrap;margin-bottom:14px}
+.fw-toolbar .hint{flex:1 1 100%}
+.chips{display:flex;gap:8px;flex-wrap:wrap}
+.chip{border:1px solid var(--line);background:#fff;border-radius:20px;padding:7px 14px;font-size:13px;color:var(--muted);transition:all .15s}
+.chip:hover{border-color:var(--accent);color:var(--accent)}
+.chip.on{background:var(--accent);border-color:var(--accent);color:#fff;font-weight:600}
+.fw-card .fw-head{display:flex;align-items:center;gap:12px;padding-bottom:12px;border-bottom:1px dashed var(--line);margin-bottom:12px}
+.fw-head .fw-name{font-size:16px;font-weight:800}
+.fw-head .fw-meta{font-size:12px;color:var(--muted);margin-top:2px}
+.fw-topics{display:grid;grid-template-columns:1fr;gap:10px}
+@media (min-width:768px){.fw-topics{grid-template-columns:repeat(2,1fr)}}
+.fw-topic{position:relative;border:1px solid var(--line);border-left:3px solid var(--copper);border-radius:10px;padding:12px 14px 12px 16px;background:#FDFBF7}
+.fw-topic .fw-t{font-weight:700;font-size:14px;color:var(--ink);margin-bottom:6px}
+.fw-pts{list-style:none;display:grid;gap:5px}
+.fw-pts li{font-size:13px;color:var(--muted);line-height:1.55;padding-left:14px;position:relative}
+.fw-pts li::before{content:'';position:absolute;left:2px;top:8px;width:5px;height:5px;border-radius:50%;background:var(--copper)}
+
+/* ---------- 刷题视图 ---------- */
+.quiz-top{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-bottom:12px;flex-wrap:wrap}
+.quiz-mode{display:inline-flex;align-items:center;gap:6px;background:var(--accent-soft);color:var(--accent);padding:6px 12px;border-radius:20px;font-size:13px;font-weight:600}
+.quiz-progress{font-size:13px;color:var(--muted)}
+.q-card{padding:20px}
+.q-head{display:flex;justify-content:space-between;align-items:center;margin-bottom:10px}
+.q-tag{font-size:12px;font-weight:700;color:var(--accent);background:var(--accent-soft);padding:3px 10px;border-radius:6px}
+.q-fav{width:38px;height:38px;border-radius:9px;border:1px solid var(--line);display:flex;align-items:center;justify-content:center;color:var(--muted)}
+.q-fav.on{color:#fff;background:var(--copper);border-color:var(--copper)}
+.q-fav svg{width:19px;height:19px}
+.q-text{font-size:16px;font-weight:600;line-height:1.7;margin-bottom:14px}
+.opts{display:grid;gap:10px}
+.opt{display:flex;gap:10px;align-items:flex-start;text-align:left;border:1px solid var(--line);border-radius:10px;padding:12px 14px;background:#fff;font-size:15px;line-height:1.55;transition:border-color .15s,background .15s}
+.opt:hover{border-color:var(--accent)}
+.opt .key{flex:0 0 auto;width:26px;height:26px;border-radius:7px;background:var(--bg);border:1px solid var(--line);color:var(--muted);font-weight:700;font-size:13px;display:flex;align-items:center;justify-content:center;margin-top:1px}
+.opt.correct{border-color:var(--ok);background:var(--ok-soft)}
+.opt.correct .key{background:var(--ok);border-color:var(--ok);color:#fff}
+.opt.wrong{border-color:var(--bad);background:var(--bad-soft)}
+.opt.wrong .key{background:var(--bad);border-color:var(--bad);color:#fff}
+.opt.dim{opacity:.55}
+.opt[disabled]{pointer-events:none}
+.fill-row{display:flex;gap:10px;flex-wrap:wrap}
+.fill-row input{flex:1 1 200px;min-width:0;padding:12px 14px;font-size:16px;border:1px solid var(--line);border-radius:10px;outline:none}
+.fill-row input:focus{border-color:var(--accent)}
+.expl{display:none;margin-top:14px;border-radius:10px;padding:14px;background:var(--accent-soft);border:1px solid #CFE1F2;font-size:14px}
+.expl.on{display:block}
+.expl.ok{background:var(--ok-soft);border-color:#BCE5CF}
+.expl.bad{background:var(--bad-soft);border-color:#F0C4C4}
+.expl .exp-label{font-weight:700;margin-bottom:4px}
+.expl .exp-label.ok{color:var(--ok)}
+.expl .exp-label.bad{color:var(--bad)}
+.quiz-actions{display:flex;gap:10px;margin-top:14px;flex-wrap:wrap}
+.quiz-actions .btn{flex:1 1 auto}
+.done-box{text-align:center;padding:28px 18px}
+.done-box .big{font-size:44px;font-weight:800;color:var(--accent)}
+.done-box p{color:var(--muted);margin:6px 0 16px}
+
+/* ---------- 速记卡片 ---------- */
+.card-stage{perspective:1200px;min-height:280px}
+.flashcard{position:relative;width:100%;min-height:260px;transform-style:preserve-3d;transition:transform .4s;cursor:pointer}
+.flashcard.flip{transform:rotateY(180deg)}
+.fc-face{position:absolute;inset:0;backface-visibility:hidden;-webkit-backface-visibility:hidden;background:#fff;border:1px solid var(--line);border-radius:var(--radius);box-shadow:var(--shadow);padding:22px;overflow:auto}
+.fc-back{transform:rotateY(180deg);background:var(--accent-soft);border-color:#CFE1F2}
+.fc-tag{font-size:12px;font-weight:700;color:var(--accent);margin-bottom:10px}
+.fc-q{font-size:16px;font-weight:600;line-height:1.7}
+.fc-opts{margin-top:12px;display:grid;gap:8px}
+.fc-opts div{font-size:14px;color:var(--muted);padding:8px 12px;border:1px solid var(--line);border-radius:8px}
+.fc-back .fc-a{font-size:15px;font-weight:700;color:var(--ok);margin-bottom:8px}
+.fc-back .fc-e{font-size:14px;line-height:1.7}
+.fc-nav{display:flex;align-items:center;justify-content:space-between;margin-top:14px;gap:10px}
+.fc-count{font-size:13px;color:var(--muted)}
+
+/* ---------- 统计 ---------- */
+.stat-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:10px;margin-bottom:14px}
+@media (min-width:768px){.stat-grid{grid-template-columns:repeat(4,1fr)}}
+.stat-box{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:14px;text-align:center}
+.stat-box b{display:block;font-size:24px;font-weight:800;line-height:1.2}
+.stat-box span{font-size:12px;color:var(--muted)}
+.bars{margin-top:12px;display:grid;gap:8px}
+.bar-row{display:grid;grid-template-columns:120px 1fr 46px;gap:8px;align-items:center;font-size:12px;color:var(--muted)}
+.bar-track{height:14px;background:var(--line);border-radius:4px;overflow:hidden}
+.bar-fill{height:100%;background:linear-gradient(90deg,var(--accent),#3B82C4);border-radius:4px;min-width:2px}
+.bar-val{font-size:12px;font-weight:700;color:var(--ink);text-align:right}
+.days{display:grid;grid-template-columns:repeat(7,1fr);gap:6px;margin-top:12px;align-items:end}
+.day{text-align:center;font-size:11px;color:var(--muted)}
+.day i{display:block;background:linear-gradient(180deg,var(--wave),#238176);border-radius:3px;margin:0 auto 4px;max-width:26px;min-height:2px}
+.day.none i{background:var(--line)}
+
+/* ---------- 复习资料页（Word 内容页内版） ---------- */
+.doc-toolbar{position:sticky;top:104px;z-index:17;background:var(--card);border:1px solid var(--line);border-radius:var(--radius);box-shadow:var(--shadow);padding:14px 16px;margin-bottom:14px}
+.doc-toolbar .hint{margin-bottom:10px;font-size:13px}
+.doc-sec{margin-bottom:16px}
+.doc-sec>h2{font-size:17px;font-weight:800;color:var(--accent);padding:12px 16px;background:var(--accent-soft);border-radius:10px;margin-bottom:12px}
+.doc-ch{background:var(--card);border:1px solid var(--line);border-radius:var(--radius);box-shadow:var(--shadow);padding:18px;margin-bottom:14px}
+.doc-ch>h3{font-size:15.5px;font-weight:800;margin-bottom:12px;padding-bottom:8px;border-bottom:2px solid var(--accent-soft)}
+.doc-p{margin:0 0 10px;text-align:justify}
+.doc-b{margin:0 0 8px;padding-left:18px;position:relative;text-align:justify}
+.doc-b::before{content:'';position:absolute;left:4px;top:9px;width:6px;height:6px;border-radius:50%;background:var(--copper)}
+.doc-note{margin-top:10px;background:var(--copper-soft);border-left:4px solid var(--copper);border-radius:8px;padding:10px 14px;font-size:14px;line-height:1.7}
+.doc-table{width:100%;border-collapse:collapse;margin:12px 0;font-size:13.5px}
+.doc-table th{background:var(--accent-soft);color:var(--accent);padding:8px 12px;border:1px solid var(--line);text-align:left;font-weight:700}
+.doc-table td{padding:8px 12px;border:1px solid var(--line);vertical-align:middle}
+.doc-table tr:nth-child(even) td{background:#FAFCFE}
+.doc-q{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:16px;margin-bottom:12px}
+.doc-q-head{display:flex;gap:8px;align-items:center;margin-bottom:8px}
+.doc-q-num{font-weight:800;color:var(--accent);font-size:14px}
+.doc-q-type{font-size:11px;font-weight:700;padding:2px 8px;border-radius:6px;background:var(--copper-soft);color:#B5750F}
+.doc-q-stem{font-size:15px;font-weight:600;margin-bottom:8px;line-height:1.7}
+.doc-q-opts{display:grid;gap:6px;margin-bottom:10px}
+.doc-q-opts div{font-size:14px;color:var(--muted);padding:8px 12px;border:1px solid var(--line);border-radius:8px}
+.doc-q-ans{font-size:14px;margin-bottom:6px}
+.doc-q-ans b{color:var(--ok)}
+.doc-q-expl{font-size:13.5px;color:var(--muted);line-height:1.7;background:var(--bg);border-radius:8px;padding:10px 12px}
+.part-item{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:16px;margin-bottom:12px}
+.part-item .pq{font-size:15px;font-weight:600;margin-bottom:10px;line-height:1.7}
+.part-item .pa{font-size:14px;line-height:1.75;text-align:justify}
+.doc-dl{text-align:center}
+.doc-dl .hint{margin-bottom:10px}
+
+/* ---------- 其他 ---------- */
+.toast{position:fixed;left:50%;bottom:28px;transform:translateX(-50%) translateY(20px);background:var(--ink);color:#fff;padding:10px 18px;border-radius:10px;font-size:14px;opacity:0;transition:all .25s;z-index:99;pointer-events:none;max-width:86vw}
+.toast.on{opacity:1;transform:translateX(-50%) translateY(0)}
+.footer{text-align:center;font-size:12px;color:var(--muted);padding:10px 0 30px}
+.danger-zone{margin-top:6px;color:var(--muted);font-size:12px;text-decoration:underline}
+
+/* ---------- 移动端底部 TabBar + 章节弹层（仅 ≤860px 显示） ---------- */
+.tabbar, .ch-mask, .ch-sheet { display: none; }
+@media (max-width: 860px) {
+  main { padding: 14px 12px 112px; }
+  .topbar { padding: 10px 12px; }
+  .top-sub { display: none; }
+  .word-btn { padding: 7px 9px; font-size: 12px; }
+  .tabs { top: 53px; }
+  .tab { padding: 10px 12px; font-size: 13px; }
+
+  .tabbar {
+    display: flex; position: fixed; left: 0; right: 0; bottom: 0; z-index: 50;
+    background: var(--card); border-top: 1px solid var(--line);
+    box-shadow: 0 -2px 10px rgba(14,74,126,.08);
+    padding-bottom: env(safe-area-inset-bottom, 0);
+  }
+  .tb-item {
+    flex: 1; display: flex; flex-direction: column; align-items: center; gap: 3px;
+    padding: 9px 0 8px; min-height: 48px; font-size: 10.5px; color: var(--muted); position: relative;
+  }
+  .tb-item svg { width: 20px; height: 20px; }
+  .tb-item.on { color: var(--accent); font-weight: 700; }
+  .tb-item.on::after {
+    content: ""; position: absolute; bottom: 2px; width: 14px; height: 2.5px;
+    background: var(--accent); border-radius: 2px;
+  }
+
+  .ch-mask {
+    display: block; position: fixed; inset: 0; z-index: 55;
+    background: rgba(10,30,50,.38); opacity: 0; pointer-events: none; transition: opacity .2s;
+  }
+  .ch-mask.show { opacity: 1; pointer-events: auto; }
+  .ch-sheet {
+    display: block; position: fixed; left: 0; right: 0; bottom: 0; z-index: 60;
+    background: var(--card); border-radius: 16px 16px 0 0;
+    transform: translateY(105%); transition: transform .22s ease;
+    max-height: 72vh; overflow-y: auto; padding-bottom: env(safe-area-inset-bottom, 0);
+  }
+  .ch-sheet.show { transform: translateY(0); }
+  .ch-sheet-head {
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 14px 16px 8px; font-weight: 700; font-size: 15px;
+  }
+  .ch-sheet-close {
+    min-width: 44px; min-height: 44px; font-size: 20px; color: var(--muted); display: flex; align-items: center; justify-content: center;
+  }
+  .ch-sheet-grid {
+    display: grid; grid-template-columns: 1fr 1fr; gap: 8px; padding: 6px 16px 20px;
+  }
+  @media (max-width: 420px) { .ch-sheet-grid { grid-template-columns: 1fr; } }
+  .ch-sheet-item {
+    min-height: 52px; border: 1px solid var(--line); border-radius: 10px;
+    padding: 10px 12px; font-size: 13px; background: #fff; text-align: left; min-width: 0;
+  }
+  .ch-sheet-item:active { border-color: var(--accent); background: var(--accent-soft); }
+  .ch-sheet-item b { display: block; font-size: 13.5px; }
+  .ch-sheet-item span { font-size: 11.5px; color: var(--muted); }
+
+  .footer { padding-bottom: 112px; }
+  .toast { bottom: 100px; }
+}
+
+</style>
+</head>
+<body>
+
+<header class="topbar">
+  <div class="topbar-in">
+    <div class="logo">
+      <svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <polyline points="13 2 3 14 11 14 11 22 21 10 13 10 13 2"></polyline>
+      </svg>
+    </div>
+    <div>
+      <div class="top-title">电力电子技术 · 刷题台</div>
+      <div class="top-sub">单选 183 · 填空 28 · 共 211 题</div>
+    </div>
+    <div class="top-stat">总正确率<b class="mono" id="topRate">0%</b></div>
+    <a class="word-btn" href="#/doc" title="页内查看 Word 复习资料"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><path d="M14 2v6h6"/><path d="M9 13h6M9 17h6"/></svg>复习资料</a>
+  </div>
+</header>
+
+<nav class="tabs">
+  <div class="tabs-in">
+    <button class="tab" data-view="home"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 10.5 12 3l9 7.5"/><path d="M5 9.5V21h14V9.5"/></svg>首页</button>
+    <button class="tab" data-view="kn"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 3l8 3v6c0 4-3.5 7.5-8 9-4.5-1.5-8-5-8-9V6z"/><path d="M9 12l2 2 4-4"/></svg>框架</button>
+    <button class="tab" data-view="random"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M16 3h5v5"/><path d="M4 20 21 3"/><path d="M21 16v5h-5"/><path d="M15 15l6 6"/><path d="M4 4l5 5"/></svg>随机</button>
+    <button class="tab" data-view="wrong"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 14l-4-4 4-4"/><path d="M5 10h7a4 4 0 0 1 4 4v7"/></svg>错题本</button>
+    <button class="tab" data-view="fav"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2l3.1 6.3 6.9 1-5 4.9 1.2 6.9-6.2-3.3L5.8 21.1 7 14.2l-5-4.9 6.9-1z"/></svg>收藏</button>
+    <button class="tab" data-view="cards"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="5" width="20" height="14" rx="2"/><path d="M2 10h20"/></svg>速记</button>
+    <button class="tab" data-view="stats"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 20V10"/><path d="M12 20V4"/><path d="M6 20v-6"/></svg>统计</button>
+  </div>
+</nav>
+
+<main>
+  <!-- ===== 首页 ===== -->
+  <section class="view" id="view-home">
+    <div class="hero">
+      <div class="hero-wave" aria-hidden="true">
+        <svg viewBox="0 0 260 120" preserveAspectRatio="none">
+          <polyline points="0,60 20,60 30,20 45,95 60,35 75,85 90,50 110,50 120,90 135,15 150,80 165,40 180,70 200,70 210,30 225,95 240,50 260,50" fill="none" stroke="#F2A33C" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+          <polyline points="0,92 30,92 45,60 90,60 105,92 135,92 150,60 195,60 210,92 240,92 260,92" fill="none" stroke="#7FD1C6" stroke-width="2" stroke-linecap="round"/>
+        </svg>
+      </div>
+      <h1>电力电子技术</h1>
+      <p>依据课程 PPT（第 1/2/3/4/5/7/9 章）与课后作业整理 · 含作业同型计算题与故障分析题</p>
+      <div class="hero-stats">
+        <div class="hero-stat"><b class="mono" id="heroTotal">0</b><span>总题数</span></div>
+        <div class="hero-stat"><b class="mono" id="heroRate">0%</b><span>总正确率</span></div>
+        <div class="hero-stat"><b class="mono" id="heroDone">0</b><span>已练题数</span></div>
+      </div>
+    </div>
+    <div class="quick">
+      <button class="btn btn-primary" onclick="location.hash='random'">随机刷题</button>
+      <button class="btn btn-amber" onclick="location.hash='wrong'">错题本</button>
+      <button class="btn btn-ghost" onclick="location.hash='fav'">我的收藏</button>
+      <button class="btn btn-line" onclick="location.hash='cards'">速记卡片</button>
+    </div>
+    <div class="card doc-card">
+      <div class="icon-chip copper">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><path d="M14 2v6h6"/><path d="M9 13h6M9 17h6"/></svg>
+      </div>
+      <div class="doc-info">
+        <b>配套复习资料（页内即点即看）</b>
+        <span>知识点梳理 + 211 题题库（含答案解析）+ 课后作业同型大题精讲，无需另开文件</span>
+      </div>
+      <a class="btn btn-amber btn-sm" href="#/doc">查看复习资料</a>
+    </div>
+    <div class="card">
+      <h2>按章节刷题</h2>
+      <div class="chap-grid" id="chapGrid"></div>
+    </div>
+  </section>
+
+  <!-- ===== 知识框架 ===== -->
+  <section class="view" id="view-kn">
+    <div class="card fw-toolbar">
+      <div class="hint">章节知识框架 · 点击要点熟悉知识体系，可一键进入对应章节刷题巩固</div>
+      <div class="chips" id="fwChips"></div>
+    </div>
+    <div id="fwBody"></div>
+  </section>
+
+  <!-- ===== 复习资料（Word 内容页内版） ===== -->
+  <section class="view" id="view-doc">
+    <div id="docBody"></div>
+  </section>
+  <script type="application/json" id="docData">{"kn":[{"ch":1,"title":"第1章 绪论","blocks":[["p","电力电子技术是使用电力电子器件对电能进行变换、控制和优化的技术，即应用于电力领域的电子技术。目前电力电子器件均用半导体制成，故也称电力半导体器件。其变换的电力范围可大到数百MW甚至GW级，也可小到数W甚至mW级。"],["p","电子技术分为信息电子技术和电力电子技术：信息电子技术负责信息处理，电力电子技术负责电力变换。二者器件的材料、工艺基本相同，但电力电子电路的器件一般只工作在开关状态，而信息电子电路器件可工作在开关状态和放大状态。"],["b","两大分支：电力电子器件制造技术——电力电子技术的基础，理论基础是半导体物理；变流技术（器件应用技术）——电力电子技术的核心，理论基础是电路理论。"],["p","电力变换四大类：交流变直流（整流）、直流变交流（逆变）、直流变直流（直流斩波）、交流变交流（调压、变频、变相）。变流技术即进行电力变换的技术。四大变换关系见表1。"],["table",[["输入电源","直流输出","交流输出"],["交流","整流","调压、变频、变相"],["直流","直流斩波","逆变"]]],["b","电力电子学（Power Electronics）名称于20世纪60年代出现；1974年美国W. Newell用倒三角形指出电力电子学由电力学、电子学和控制理论三个学科交叉形成。"],["b","电力电子技术是弱电控制强电的技术，是弱电和强电的接口，控制理论是这种接口的有力纽带；电力电子装置是自动化技术的基础元件和重要支撑技术。"],["p","发展史：电力电子技术的发展史是以电力电子器件的发展史为纲的。经历电子管与水银（汞弧）整流器时代（史前期/黎明期）→晶闸管时代（1957年晶闸管问世）→全控型器件迅速发展（IGBT出现、功率集成器件）。"],["p","应用与节能：广泛应用于一般工业（交直流电机、电化学、冶金）、交通运输（电气化铁道、电动汽车、航空航海）、电力系统（高压直流输电、柔性交流输电、无功补偿）、电子装置电源、家用电器（节能灯、变频空调）等。发达国家的电能已有80%经过电力电子技术处理，节能效果达15%~40%，因此电力电子技术也被称为节能技术。"],["note","考点提示：四大变换名称填空（作业1第1题）；“电力电子技术研究的也就是电源技术”。"]]},{"ch":2,"title":"第2章 电力电子器件","blocks":[["p","概念：电力电子器件是可直接用于主电路中实现电能变换或控制的电子器件；主电路是电气设备或电力系统中直接承担电能变换或控制任务的电路。"],["b","特征：能处理电功率的能力远大于信息电子器件；一般都工作在开关状态；往往需要由信息电子电路来控制；自身功率损耗远大于信息电子器件，一般都要安装散热器。"],["p","损耗：通态损耗是器件功率损耗的主要成因；器件开关频率较高时，开关损耗可能成为器件功率损耗的主要因素。电力电子系统由控制电路、驱动电路、保护电路和以电力电子器件为核心的主电路组成。"],["b","按控制程度分类：半控型器件（晶闸管，只能控制导通不能控制关断）；全控型器件（IGBT、电力MOSFET，既可控制导通又可控制关断，又称自关断器件）；不可控器件（电力二极管，不能用控制信号控制通断，不需要驱动电路）。"],["b","按驱动信号性质分类：电流驱动型（电力二极管、晶闸管、GTO、GTR，通过注入或抽出电流控制）；电压驱动型（电力MOSFET、IGBT，仅施加电压信号即可控制）。"],["p","电力二极管：基本结构和工作原理与信息电子电路中的二极管一样，由面积较大的PN结、两端引线和封装组成；N-层掺杂浓度很低、电阻率很高，具有较高耐压能力，但会导致通态压降升高，两者矛盾。正向大电流时发生电导调制效应，N-区电阻率明显降低。"],["b","静态特性：门槛电压UTO（IF开始明显增加对应的电压）、正向电压降UF、反向漏电流。动态特性：开通过程出现正向压降过冲UFP；关断过程反向恢复时间trr=td+tf，恢复系数为tf/td。"],["b","主要参数：正向平均电流IF(AV)按发热效应定义，使用时按有效值相等原则选取并留裕量；反向重复峰值电压URRM使用时留两倍裕量；最高工作结温TJM通常125~175℃；浪涌电流IFSM。"],["b","主要类型：普通二极管（1kHz以下整流，trr>5μs）；快恢复二极管（trr可低于50ns、UF约0.9V、耐压多在1200V以下，超快速恢复trr在100ns以下甚至20~30ns）；肖特基二极管（金属-半导体势垒，多数载流子导电，反向恢复10~40ns、正向压降比PN结约低0.2V、开关频率高，但反向耐压低约60~100V、反向漏电流大）。"],["p","晶闸管：1956年美国贝尔实验室发明，1957年美国通用电气公司开发出第一只产品，1958年商业化；能承受的电压和电流容量最高，工作可靠，在大容量场合具有重要地位。三端A（阳极）、K（阴极）、G（门极），四层PNPN结构；可用双晶体管模型（α1+α2趋近于1）理解其开通原理。"],["b","导通条件与特性：承受正向阳极电压且门极注入触发电流才开通（阳极电压过高雪崩、du/dt过高、结温较高、光触发也可能导通，但门极触发最精确、迅速而可靠）；承受反向电压时不论门极有无触发电流都不导通；一旦导通门极即失去控制作用；要使晶闸管关断可向阳极注入负电流或在A-K之间施加负电压。"],["b","主要参数：电压定额取UDRM、URRM中较小标值作为额定电压，选用时取正常工作峰值电压的2~3倍；通态平均电流IT(AV)（环境温度40℃、正弦半波平均值）按有效值相等原则选取；动态参数du/dt（断态电压临界上升率，过大导致误导通）、di/dt（通态电流临界上升率，过大造成局部过热损坏）。开通时间tgt=td+tr（td约0.5~1.5μs、tr约0.5~3μs）；关断时间tq=trr+tgr，普通晶闸管约几百微秒，tgr内重新施加正压仍会导通。"],["p","电力MOSFET：金属-氧化物-半导体场效应晶体管，用栅极电压控制漏极电流；单极型器件（无电导调制效应），开关速度快、工作频率高（开关时间10~100ns，工作频率可达100kHz以上，为主要电力电子器件中最高），但导通电阻高、导通压降大、功耗大，用于功率不超过10kW的场合。主要是N沟道增强型。"],["b","特性参数：转移特性跨导Gfs、开启电压UT；栅源电压UGS超过20V将导致绝缘层击穿（正常工作uGS=0~+15V）；漏源之间有寄生二极管；通态电阻具有正温度系数，对并联均流有利；开关速度与输入电容Cin充放电有关，降低驱动电路内阻可加快开关速度，开关频率越高所需驱动功率越大。"],["p","IGBT：绝缘栅双极晶体管，由GTR（双极型、电流驱动、有电导调制效应）和电力MOSFET（单极型、电压驱动、开关快）复合而成，1986年投入市场，是中小功率电力电子设备的主导器件。结构上比VDMOSFET多一层P+注入区，通流能力强；简化等效电路是GTR与MOSFET组成的达林顿结构。通断由栅射极电压uGE决定（uGE=-15V~+15V），uGE大于开启电压UGE(th)时导通，施加零压或反压时关断。"],["b","IGBT参数与特点：最大集射极间电压UCES、最大集电极电流IC（含1ms脉宽ICP）、最大集电极功耗PCM；开关速度高、开关损耗小；安全工作区比GTR大、耐脉冲电流冲击；通态压降比VDMOSFET低（电导调制）；输入阻抗高。开通驱动电压一般15~20V（MOSFET为10~15V），关断时施加-5~-15V负压有利。IGBT往往与反并联的快速二极管封装成模块，成为逆导器件。"],["p","器件类型归纳：单极型（MOSFET、SIT）；双极型（电力二极管、晶闸管、GTO、GTR、SITH）；复合型（IGBT、MCT）。电流驱动型（双极型器件中除SITH外）具有电导调制效应，通态压降低、导通损耗小，但工作频率较低、所需驱动功率大、驱动电路较复杂；电压驱动型（单极型、复合型及SITH）输入阻抗高、所需驱动功率小、驱动电路简单、工作频率高。"],["p","当前格局：GTO为兆瓦以上首选（制造水平6kV/6kA）；IGBT为主体、第四代产品（2.5kV/1.8kA），兆瓦以下首选；光控晶闸管用于功率更大场合（8kV/3.5kA），装置容量最大（最高达300MVA）；电力MOSFET在中小功率特别是低压领域地位牢固。功率模块和功率集成电路是发展趋势。"],["note","考点提示：作业1全部填空与简答题均出自本章——简称（IGBT、GTO）、容量最高（晶闸管）、频率最高（MOSFET）、开关速度最快（MOSFET）、单管功率最大（GTO）、肖特基损耗小、通态损耗与开关损耗、晶闸管正常工作特性、RGS作用。"]]},{"ch":3,"title":"第3章 整流电路","blocks":[["p","整流电路是出现最早的电力电子电路，将交流电变为直流电。分类：按器件分不可控、半控、全控；按结构分桥式电路和零式电路；按交流输入相数分单相和多相；按变压器二次侧电流方向分单拍和双拍电路。"],["p","相控方式：通过控制触发脉冲的相位来控制直流输出电压大小的方式称为相位控制方式（简称相控）。触发延迟角α：从晶闸管开始承受正向阳极电压起到施加触发脉冲止的电角度；导通角θ：晶闸管在一个电源周期中处于通态的电角度。"],["b","单相半波可控整流（电阻负载）：α移相范围180°；电路简单但输出脉动大，变压器二次侧电流含直流分量造成铁芯直流磁化，实际很少应用，主要用于建立整流电路基本概念。"],["b","单相桥式全控整流：电阻负载时α移相范围180°，Ud=0.9U2(1+cosα)/2，每个晶闸管电流平均值只有输出直流平均值的一半；阻感负载（大电感）时α移相范围90°，晶闸管导通角θ=180°与α无关，Ud=0.9U2cosα，i2为正负各180°矩形波、有效值I2=Id，晶闸管承受最大正反向电压均为√2U2；反电动势负载时存在停止导电角δ，电流断续会使电动机机械特性变软，可串联平波电抗器保证电流连续。"],["b","单相全波可控整流：与单相全控桥从直流输出端或交流输入端看基本一致，变压器不存在直流磁化；只用2个晶闸管（少2个驱动电路），但晶闸管承受的最大电压是单相全控桥的2倍（2√2U2）；导电回路只含1个晶闸管，管压降少1个，有利于低输出电压场合。"],["b","单相桥式半控整流：电阻负载时与全控电路工作情况相同；阻感负载若无续流二极管VDR，当α突然增大至180°或触发脉冲丢失时会发生失控现象（一个晶闸管持续导通、两个二极管轮流导通，ud成为正弦半波且平均值保持恒定）；VDR可避免失控，且续流期间导电回路只有一个管压降、损耗小。"],["p","三相半波可控整流：变压器一次侧接三角形（避免3次谐波流入电网）、二次侧接星形（得到零线），三管共阴极接法；自然换相点是各相晶闸管能触发导通的最早时刻，即α=0°的起点。电阻负载α移相范围150°（α≤30°电流连续，α>30°电流断续、导通角小于120°）；阻感负载α移相范围90°（α>30°时ud波形出现负的部分）。晶闸管承受最大反向电压为线电压峰值√6U2，最大正向电压为相电压峰值√2U2（α=60°时）。主要缺点是变压器二次电流含直流分量，应用较少。"],["p","三相桥式全控整流：应用最广的整流电路。共阴极组1、3、5，共阳极组4、6、2，导通顺序1-2-3-4-5-6；2管同时导通形成供电回路（共阴、共阳各1，且不能为同一相器件）；触发脉冲按顺序相位依次差60°，同一相上下桥臂（14、36、52）脉冲相差180°；ud一周期脉动6次，为6脉波整流电路；需保证同时导通的2个晶闸管均有脉冲，可采用宽脉冲触发或双窄脉冲触发（常用）。电阻负载α移相范围120°（α≤60°时ud连续，α>60°时每60°有一段为零且不出现负值）；阻感负载α移相范围90°（α>60°时ud出现负的部分）。电流连续时Ud=2.34U2cosα。三相桥导通顺序见表2。"],["table",[["时段","Ⅰ","Ⅱ","Ⅲ","Ⅳ","Ⅴ","Ⅵ"],["共阴极组导通的晶闸管","1","1","3","3","5","5"],["共阳极组导通的晶闸管","6","2","2","4","4","6"],["整流输出电压ud","uab","uac","ubc","uba","uca","ucb"]]],["b","电容滤波的不可控整流电路：单相桥式常用于小功率场合。空载时放电时间常数无穷大、输出电压最大（约√2U2）；重载时电容几乎失去存储作用，Ud趋近0.9U2；设计时按Ud≈1.2U2选择电容。流经电容的电流周期平均为零，Id=IR，每管ID=Id/2。三相桥式：空载输出电压最大约为线电压峰值√6U2≈2.45U2，随负载增加减小，重载趋近2.34U2；每管ID=Id/3；二极管承受最大反向电压为线电压峰值。"],["b","带平衡电抗器的双反星形可控整流电路：适用于低电压、大电流场合。二次侧为两组匝数相同极性相反的绕组分别接成两组三相半波电路，极性相反可消除铁芯直流磁化；平衡电抗器保证两组三相半波电路能同时导电。每管最大导通角120°、平均电流为Id的1/6，输出电流比三相桥式可大一倍。不加平衡电抗器即成为六相半波整流电路（每管最大导通角60°、平均电流Id/6、α=0时Ud=1.35U2），变压器利用率低、极少采用。"],["p","有源逆变：逆变是把直流电转变成交流电，是整流的逆过程；交流侧接电网为有源逆变（应用于直流可逆调速系统、绕线转子异步电动机串级调速、高压直流输电等），交流侧接负载为无源逆变。产生有源逆变的条件有二：直流电动势为负（反极性）且其值大于Ud；晶闸管控制角α>π/2使Ud为负值。半控桥或有续流二极管的电路不能实现有源逆变（ud不能出现负值），欲实现有源逆变只能采用全控电路。"],["b","逆变角β=π-α，自β=0的起始点向左方计量。逆变失败（逆变颠覆）的原因：触发电路工作不可靠（脉冲丢失、延迟）、晶闸管故障、交流电源异常（断电、缺相、电压过低）、换相裕量角不足（晶闸管不能可靠关断）。β>γ（换相重叠角）时换相结束晶闸管能承受反压而关断；β<γ会导致逆变失败。最小逆变角βmin=δ+γ+θ′（δ为关断时间折合电角度约4°~5°，θ′为安全裕量角约10°），一般取30°~35°。"],["b","相控电路的驱动控制：晶闸管相控电路习惯称触发电路，其中以同步信号为锯齿波的触发电路应用最多。其三个基本环节：脉冲的形成与放大、锯齿波的形成和脉冲移相、同步环节；此外还有强触发和双窄脉冲形成环节。同步要求触发脉冲频率与主电路电源频率相同且相位关系确定。"],["note","考点提示：作业2全部题目出自本章（VT2不能导通/击穿短路的影响、三相半波B相脉冲消失的波形、单相桥式全控大电感负载计算）；计算题务必掌握Ud=0.9U2cosα、0.9U2(1+cosα)/2、2.34U2cosα、1.17U2cosα等公式。"]]},{"ch":4,"title":"第4章 逆变电路","blocks":[["p","逆变的概念：与整流相对应，把直流电变成交流电。交流侧接电网为有源逆变；交流侧接负载为无源逆变。变频电路分交交变频和交直交变频两种，交直交变频由交直变换（整流）和直交变换两部分组成，后一部分就是逆变。各种直流电源（蓄电池、干电池、太阳能电池等）以及交流电机调速用变频器、不间断电源、感应加热电源等装置的核心部分都是逆变电路。"],["b","按直流侧电源性质分类：电压型逆变电路（VSTI，直流侧是电压源）；电流型逆变电路（CSTI，直流侧是电流源）。"],["p","电压型逆变电路的特点：直流侧为电压源或并联大电容，直流侧电压基本无脉动；输出电压为矩形波，输出电流因负载阻抗不同而不同；阻感负载时需提供无功功率，为给交流侧向直流侧反馈的无功能量提供通道，逆变桥各臂并联反馈二极管（又称续流二极管，同时使负载电流连续）。"],["b","单相半桥逆变电路：V1和V2栅极信号互补，输出电压uo为矩形波，幅值Um=Ud/2；V1（V2）通时直流侧向负载提供能量，VD1（VD2）通时电感储能向直流侧反馈。优点：电路简单、器件少；缺点：输出幅值Ud/2、直流侧需两电容器串联并控制电压均衡；用于几kW以下小功率逆变电源。单相全桥、三相桥式都可看成若干个半桥逆变电路的组合。"],["b","单相全桥逆变电路：四个桥臂可看成两个半桥组合，两对桥臂交替导通180°；输出电压和电流波形与半桥相同，幅值高出一倍（Um=Ud）；改变输出交流电压有效值只能通过改变直流电压Ud实现。阻感负载时可采用移相调压：V3的基极信号比V1落后θ（0<θ<π），改变θ就可调节输出电压。"],["note","考点提示：电压型/电流型分类依据、反馈（续流）二极管的作用、半桥幅值Ud/2、全桥移相调压θ。"]]},{"ch":5,"title":"第5章 直流-直流变流电路","blocks":[["p","直流斩波电路（DC Chopper）：将直流电变为另一固定电压或可调电压的直流电，也称直流-直流变换器（DC/DC），一般指直接将直流电变为另一直流电，不包括直流—交流—直流。6种基本斩波电路：Buck、Boost、Buck-Boost、Cuk、Sepic和Zeta。复合斩波电路是不同结构基本斩波电路的组合；多相多重斩波电路是相同结构基本斩波电路的组合。"],["b","基本关系：斩波输出直流平均电压Uo=αUs（α为导通占空比）；忽略损耗时输出功率等于输入功率，可看作直流变压器（UoIo=UsI1）。三种控制方式：T不变变ton——脉冲宽度调制（PWM，应用最多）；ton不变变T——频率调制；ton和T都可调——混合型。"],["p","降压斩波电路（Buck）：全控型器件多为IGBT，配有续流二极管，负载可能出现反电动势；典型用途之一是拖动直流电动机，也可带蓄电池负载。V导通时电源向负载供电、电流按指数上升，V关断时VD续流、电流按指数下降；通常串接较大电感使电流连续且脉动小。电流连续时Uo=αE；电流断续时Uo被抬高，一般不希望出现。"],["p","升压斩波电路（Boost）：V通时电源向电感L充电储能，电容C向负载供电；V断时电源E和电感L同时向电容充电并向负载供电。电压升高的原因是电感L储能使电压泵升、电容C将输出电压保持住。稳态时Uo=E/(1-α)=E·T/toff；升压比T/toff，其倒数β=toff/T，α+β=1。典型应用：直流电动机传动（再生制动时把电能回馈给直流电源）、单相功率因数校正电路、其他交直流电源。"],["p","升降压斩波电路（Buck-Boost）：V通时电源经V向L供电储能、C维持输出电压并向负载供电；V断时L的能量向负载释放。负载电压极性为上负下正，与电源电压极性相反，故又称反极性斩波电路。稳态时Uo=αE/(1-α)：0<α<1/2时为降压，1/2<α<1时为升压。"],["p","复合斩波电路：电流可逆斩波电路（两象限）是降压斩波与升压斩波电路的组合——V1、VD1构成降压斩波（电动，第1象限），V2、VD2构成升压斩波（再生制动，第2象限），电动机电枢电流可正可负但电压只能是一种极性；必须防止V1和V2同时导通导致电源短路。桥式可逆斩波电路（四象限）由两个电流可逆斩波电路组合：V4保持通时提供正电压（第1、2象限），V2保持通时提供负电压（第3、4象限）。"],["p","带隔离的直流-直流变流电路（直—交—直电路）：相比直流斩波增加了交流环节。采用原因：输出端与输入端需要隔离；需要相互隔离的多路输出；输出电压与输入电压比例远小于1或远大于1；交流环节采用较高频率可减小变压器和滤波元件体积重量。分为单端电路（变压器流过直流脉动电流：正激、反激）和双端电路（变压器电流为正负对称交流：半桥、全桥、推挽）。"],["b","正激电路：S开通后W1、W2绕组电压上正下负，VD1通、VD2断，电感电流逐渐增长；S关断后电感经VD2续流。为防止变压器激磁电感饱和，必须使激磁电流在S关断后到下次开通前降回零，这一过程称为变压器的磁心复位。反激电路：变压器起储能元件作用（可看作一对相互耦合的电感），S开通时W1电流线性增长储能，S关断时磁场能量经W2和VD向输出端释放；输出电压随负载减小而升高，在负载为零的极限情况下电压趋于无穷，故不应工作于负载开路状态。"],["b","半桥电路：S1与S2交替导通，变压器一次侧形成幅值为Ui/2的交流电压，S1、S2断态承受峰值电压均为Ui。全桥电路：互为对角的两个开关同时导通（S1S4、S2S3），一次侧形成幅值为Ui的交流电压；若两对开关导通时间不对称，交流电压将含直流分量造成磁路饱和，应避免或串联电容阻断直流电流；存在直通问题。推挽电路：两开关交替导通，一次侧两绕组形成相位相反的交流电压，S1、S2断态承受峰值电压均为2Ui；存在偏磁问题。隔离型DC-DC各电路比较见表3。"],["table",[["电路","优点","缺点","功率范围","应用领域"],["正激","电路简单、成本低、可靠性高、驱动电路简单","变压器单向激磁，利用率低","百W~kW","各种中、小功率电源"],["反激","电路非常简单、成本很低、可靠性高、驱动电路简单","难以达到较大功率，变压器单向激磁利用率低","W~十W","小功率电子设备、计算机设备、消费电子设备电源"],["全桥","变压器双向励磁，容易达到大功率","结构复杂、成本高、有直通问题、可靠性低，需复杂多组隔离驱动电路","百W~百kW","大功率工业用电源、焊接电源、电解电源等"],["半桥","变压器双向励磁、无偏磁问题、开关较少、成本低","有直通问题、可靠性低，需复杂隔离驱动电路","百W~kW","各种工业用电源、计算机电源等"],["推挽","变压器双向励磁，一次侧电流回路只有一个开关、通态损耗较小、驱动简单","有偏磁问题","百W~kW","低输入电压的电源"]]],["b","双端电路常用的整流电路形式：全波整流电路（优点：电感电流回路只有一个二极管压降、损耗小，只需2个二极管；缺点：二极管断态承受反压较高、变压器二次侧需中心抽头；适用于输出电压较低<100V的场合）和全桥整流电路（优点：二极管断态承受电压仅为交流电压幅值、变压器绕组简单；缺点：电流回路有两个二极管压降、需4个二极管；适用于高压输出场合）。输出电压非常低时可采用同步整流电路，利用低电压MOSFET导通电阻很小的特性降低整流导通损耗。"],["note","考点提示：6种基本斩波名称填空、Uo=αUs、Uo=E/(1-α)、Uo=αE/(1-α)、两象限/四象限斩波、隔离型电路单端/双端划分。"]]},{"ch":7,"title":"第7章 PWM控制技术","blocks":[["p","PWM（Pulse Width Modulation）控制即脉宽调制技术：通过对一系列脉冲的宽度进行调制，来等效地获得所需要的波形（含形状和幅值）。PWM控制的思想源于通信技术，全控型器件（IGBT、电力MOSFET）的发展使实现PWM控制变得十分容易；直流斩波电路采用的就是PWM技术。"],["b","面积等效原理：冲量（窄脉冲的面积）相等而形状不同的窄脉冲加在具有惯性的环节上时，其效果基本相同。据此可用一系列等幅不等宽的脉冲来代替一个正弦半波（SPWM波）；若要改变等效输出正弦波幅值，按同一比例改变各脉冲宽度即可。"],["b","等幅PWM波与不等幅PWM波：等幅PWM波用于输入电源是恒定直流的场合（直流斩波电路、PWM逆变电路、PWM整流电路）；不等幅PWM波用于输入电源是交流或不是恒定直流的场合（斩控式交流调压电路、矩阵式变频电路）。"],["p","PWM逆变电路及其控制方法：目前中小功率的逆变电路几乎都采用PWM技术，逆变电路是PWM控制技术最重要的应用场合；实用PWM逆变电路几乎都是电压型电路。单相桥式PWM逆变电路工作时V1和V2通断互补、V3和V4互补。"],["b","单极性PWM控制方式（单相桥）：ur正半周V1保持通、V2保持断；ur>uc时使V4通、V3断，uo=Ud；ur<uc时使V4断、V3通，uo=0。输出只有Ud和0两种电平，在ur和uc的交点时刻控制IGBT通断。"],["b","双极性PWM控制方式：在ur的半个周期内三角波载波有正有负，所得PWM波也有正有负，幅值只有±Ud两种电平；ur>uc时V1V4导通、V2V3关断（io>0时V1V4通，io<0时VD1VD4通），uo=Ud；ur<uc时V2V3导通，uo=-Ud。ur正负半周对各开关器件的控制规律相同。"],["p","PWM控制技术的应用与地位：用于直流斩波电路——直流斩波电路实际上就是直流PWM电路，应用于直流电动机调速系统构成广泛应用的直流脉宽调速系统；用于逆变电路——最具代表性，除功率很大的逆变装置外，不用PWM控制的逆变电路已十分少见；用于整流电路——构成PWM整流电路，可看成逆变电路中的PWM技术向整流电路的延伸。"],["b","相位控制（相控）与斩波控制（斩控）：以相控整流电路和交流调压电路为代表的相位控制技术至今仍占据重要地位；以PWM控制技术为代表的斩波控制技术正在越来越占据主导地位。把两种技术对照学习，对电力电子电路的控制技术会有更明晰的认识。"],["note","考点提示：面积等效原理、SPWM实现方法（等幅不等宽）、单极性/双极性调制的开关规律与输出电平、相控vs斩控。"]]},{"ch":9,"title":"第9章 器件应用的共性问题","blocks":[["p","驱动电路：是主电路与控制电路之间的桥梁。基本任务：按控制目标的要求施加开通或关断的信号；对半控型器件只需提供开通控制信号，对全控型器件则既要提供开通信号又要提供关断信号。驱动电路的电气隔离环节一般采用光隔离（光耦合器）或磁隔离（脉冲变压器，宽脉冲时为避免铁芯饱和常采用高频调制和解调）。"],["b","晶闸管触发电路应满足的要求：脉冲的宽度应保证晶闸管可靠导通（感性负载和反电动势负载需要宽脉冲或脉冲列触发）；触发脉冲应有足够的幅度（户外寒冷场合脉冲电流为最大触发电流的3~5倍，前沿增加到1~2A/μs）；不超过门极电压、电流和功率定额，且在可靠触发区域之内；应具有良好的抗干扰性能、温度稳定性及与主电路的电气隔离。理想触发脉冲波形：强脉冲幅值3~5 IGT、平顶幅值1.5~2 IGT、前沿上升时间<1μs。"],["b","电压驱动型器件（电力MOSFET、IGBT）驱动电路：为快速建立驱动电压要求输出电阻小；MOSFET开通驱动电压一般10~15V，IGBT开通驱动电压一般15~20V；关断时施加一定幅值的负驱动电压（一般-5~-15V）有利于减小关断时间和关断损耗；在栅极串入低值电阻可减小寄生振荡。常用专用混合集成驱动器：三菱M579系列（M57962L、M57959L）、富士EXB系列（EXB840、EXB841、EXB850、EXB851）。"],["p","过电压保护：过电压分为外因过电压（主要来自雷击和系统操作：操作过电压、雷击过电压）和内因过电压（主要来自装置内部器件的开关过程：换相过电压——换相结束后反向电流急剧减小由线路电感感应产生；关断过电压——全控型器件关断时正向电流迅速降低由线路电感感应产生）。抑制措施：避雷器F、变压器静电屏蔽层D、静电感应过电压抑制电容C、阀侧浪涌RC电路、压敏电阻RV、直流侧RC抑制电路、RCD电路等；其中RC3和RCD为抑制内因过电压的措施，属于缓冲电路范畴。"],["p","过电流保护：过电流分过载和短路两种情况。保护措施包括电子保护电路、快速熔断器、直流快速断路器、过电流继电器、交流断路器等；电子电路作为第一保护措施，快熔仅作为短路时部分区段的保护，直流快速断路器整定在电子电路动作之后，过电流继电器整定在过载时动作。对重要的且易发生短路的晶闸管设备或全控型器件需采用电子电路保护，常在全控型器件的驱动电路中设置过电流保护环节，响应最快（硬件保护与软件保护相结合）。快熔对器件的保护方式：全保护（过载、短路均由快熔保护，适用于小功率装置或器件裕度较大的场合）和短路保护（快熔只在短路电流较大的区域起作用）。"],["p","缓冲电路（吸收电路）：抑制器件的过电压、du/dt、过电流和di/dt，减小器件的开关损耗。关断缓冲电路（du/dt抑制电路）吸收器件的关断过电压和换相过电压、抑制du/dt、减小关断损耗；开通缓冲电路（di/dt抑制电路）抑制器件开通时的电流过冲和di/dt、减小开通损耗；复合缓冲电路是二者的结合。按能量去向分类：耗能式缓冲电路和馈能式缓冲电路（无损吸收电路）。选型：RC缓冲电路主要用于小容量器件，充放电型RCD缓冲电路用于中等容量场合，放电阻止型RCD缓冲电路用于中或大容量器件。"],["p","晶闸管的串联：当晶闸管额定电压小于要求时可串联使用。理想串联希望分压相等，但因特性差异电压分配不均匀：静态不均压（串联器件流过的漏电流相同，但因静态伏安特性分散，各器件分压不等）；动态不均压（由动态参数和特性差异造成）。均压措施：静态——选用参数和特性尽量一致的器件，采用电阻均压（Rp阻值应比器件阻断时的正反向电阻小得多）；动态——用RC并联支路作动态均压，采用门极强脉冲触发可显著减小器件开通时间的差异。"],["p","晶闸管的并联：多个器件并联承担较大的电流。因静态和动态特性参数差异电流分配不均匀。均流措施：挑选特性参数尽量一致的器件、采用均流电抗器、用门极强脉冲触发（有助于动态均流）。当需要同时串联和并联晶闸管时，通常采用先串后并的方法联接。"],["p","电力MOSFET和IGBT的并联运行：电力MOSFET的Ron具有正温度系数，具有电流自动均衡能力，容易并联；注意选用Ron、UT、Gfs和Ciss尽量相近的器件，电路走线和布局尽量对称，可在源极电路中串入小电感起均流电抗器作用。IGBT在1/2或1/3额定电流以下的区段通态压降具有负温度系数，以上区段具有正温度系数，并联使用时也具有电流自动均衡能力，易于并联。"],["note","考点提示：半控/全控器件驱动信号差异、触发脉冲要求、过电压内外因分类、电子电路保护第一、缓冲电路分类、串联均压/并联均流措施。"]]}],"part3":[{"title":"简答题","items":[{"q":"简述晶闸管正常工作时的特性（作业1简答1）。","a":"①承受反向电压时，不论门极是否有触发电流，晶闸管都不会导通；②承受正向电压时，仅在门极有触发电流的情况下晶闸管才能开通；③晶闸管一旦导通，门极就失去控制作用；④要使晶闸管关断，可向阳极注入负电流或在A-K之间施加负电压。"},{"q":"图示为MOS管的一种应用，请问：图中RGS的作用是什么？若输入ui为高电平，输出uo是多少（作业1简答2）？","a":"（1）当MOS管关断时，RGS为输入结电容的放电提供回路；（2）输入ui为高电平时MOS管导通，输出uo=0V。"},{"q":"产生有源逆变的条件是什么？","a":"①直流侧存在反极性（负的）直流电动势，且其值大于Ud（|EM|>Ud）；②晶闸管的控制角α>π/2，使整流电压Ud为负值。注意：半控桥或有续流二极管的电路，因整流电压ud不能出现负值、直流侧也不允许出现负极性的电动势，故不能实现有源逆变，欲实现有源逆变只能采用全控电路。"},{"q":"什么是PWM控制中的面积等效原理？它在PWM控制中有何意义？","a":"面积等效原理：冲量相等而形状不同的窄脉冲加在具有惯性的环节上时，其效果基本相同（环节的输出响应波形基本相同）。意义：它说明可以用一系列等幅不等宽的脉冲（SPWM波）来代替正弦半波，通过改变脉冲宽度按同一比例调节等效输出幅值，从而以简单的开关调制实现所需的波形，是PWM调制技术的理论基础。"},{"q":"晶闸管触发电路应满足哪些要求？","a":"①脉冲的宽度应保证晶闸管可靠导通（感性负载和反电动势负载需要宽脉冲或脉冲列触发）；②触发脉冲应有足够的幅度（户外寒冷场合脉冲电流为最大触发电流的3~5倍，前沿增加到1~2A/μs）；③不超过门极电压、电流和功率定额，且在可靠触发区域之内；④应具有良好的抗干扰性能、温度稳定性及与主电路的电气隔离。"},{"q":"简述升压斩波电路的工作原理。","a":"设L和C值很大：V处于通态时，电源E向电感L充电储能（电流近似恒定I1），电容C向负载R供电，输出电压Uo恒定；V处于断态时，电源E和电感L同时向电容C充电并向负载提供能量。稳态时一个周期内电感L积蓄能量与释放能量相等（EI1ton=(Uo-E)I1toff），化简得Uo=E·T/toff=E/(1-α)，因T/toff>1，输出电压高于电源电压，故为升压斩波电路。"},{"q":"缓冲电路的作用是什么？按功能可分为哪几类？","a":"缓冲电路（吸收电路）用于抑制器件的过电压、du/dt、过电流和di/dt，减小器件的开关损耗。按功能分类：关断缓冲电路（du/dt抑制电路），吸收关断过电压和换相过电压、抑制du/dt、减小关断损耗；开通缓冲电路（di/dt抑制电路），抑制开通时的电流过冲和di/dt、减小开通损耗；复合缓冲电路是二者的结合。按能量去向还可分为耗能式缓冲电路和馈能式缓冲电路（无损吸收电路）。"}]},{"title":"计算题","items":[{"q":"单相桥式全控整流电路，大电感负载，U2=100V（交流有效值），Rd=2Ω，α=60°（作业2题3）。（1）无续流二极管VDR时，计算Ud和Id；（2）有续流二极管VDR时，计算Ud和Id。","a":"（1）无VDR（大电感负载，电流连续）：Ud=0.9U2cosα=0.9×100×cos60°=45V；Id=Ud/Rd=45/2=22.5A。（2）有VDR（晶闸管导通角θ=π-α，续流期间ud=0）：Ud=0.9U2(1+cosα)/2=0.9×100×(1+0.5)/2=67.5V；Id=Ud/Rd=67.5/2=33.75A。（3）波形要点：无VDR时ud在ωt=α~π区间出现负值段（大电感续流导通），有VDR时该区间ud=0（由VDR续流）。"},{"q":"三相桥式全控整流电路带阻感负载（电流连续），U2=220V，α=30°，求Ud。","a":"Ud=2.34U2cosα=2.34×220×cos30°≈2.34×220×0.866≈445.7V。"},{"q":"三相半波可控整流电路带阻感负载（电流连续），U2=100V，α=0°，求Ud及每个晶闸管导通角。","a":"Ud=1.17U2cosα=1.17×100×1=117V；阻感负载电流连续时每个晶闸管导通角θ=120°。"},{"q":"降压斩波电路，电源电压E=200V，开关周期T=200μs，导通时间ton=100μs，负载电流连续，求输出电压平均值Uo。","a":"占空比α=ton/T=100/200=0.5；Uo=αE=0.5×200=100V。"},{"q":"升压斩波电路，电源电压E=100V，占空比α=0.4，求输出电压Uo。","a":"Uo=E/(1-α)=100/(1-0.4)=100/0.6≈166.7V。"}]},{"title":"波形与故障分析题","items":[{"q":"单相桥式全控整流电路，电阻负载，若晶闸管VT2不能导通，结果会怎样？若这只晶闸管被击穿而短路，其他晶闸管受什么影响（作业2题1）？","a":"（1）VT2不能导通：负半周VT2不导通，与其组成一对桥臂的VT3也无法形成导电回路，输出电压ud只剩正半周，负半周ud=0，电路退化为单相半波可控整流，输出直流平均电压降为原来的一半（Ud=0.45U2(1+cosα)/2）。（2）VT2被击穿短路：正半周VT1、VT4导通时，u2经短路的VT2与导通的VT4形成短路回路，VT4将因过流而损坏（其他晶闸管VT1、VT3也受冲击）；负半周VT2、VT3触发导通时VT2已短路，VT3单独导通，电路不能正常工作，应尽快切断电源保护。"},{"q":"三相半波可控整流电路，若B相触发脉冲消失，试分析电阻性负载和阻感负载在α=0°时整流电压ud的波形（作业2题2）。","a":"电阻负载：B相晶闸管VT2不导通，在B相应导通区间（120°~240°）无其它相晶闸管可换流，ud波形在该区间为零，其余区间（A相0°~120°、C相240°~360°）正常，输出电压平均值降低（约为正常的2/3）。阻感负载：负载电流不能突变，B相脉冲消失将导致电流断续，ud波形出现缺口；若电感很大，电流力图维持，波形与电阻负载不同，需按电路逐段分析（实际波形中B相区间无整流电压输出，其余区间基本正常）。"},{"q":"三相桥式全控整流电路带阻感负载，α>60°（如α=90°）时ud波形有何特点？","a":"阻感负载时ud波形会出现负的部分：α>60°后每个60°区间内ud有一段为负值（电感维持电流，晶闸管继续导通），正负交替使平均值下降；α=90°时Ud=0，α>90°后电路进入有源逆变工作状态。而电阻负载α>60°时ud每60°中有一段为零，波形不出现负值。"},{"q":"单相桥式半控整流电路带阻感负载，为什么必须接续流二极管VDR？","a":"若无VDR，当α突然增大至180°或触发脉冲丢失时，会发生失控现象：一个晶闸管持续导通而两个二极管轮流导通，ud成为正弦半波，其平均值保持恒定无法调节。接入VDR后，续流过程由VDR完成，避免了失控现象；且续流期间导电回路中只有一个管压降，有利于降低损耗。"}]}]}</script>
+
+  <!-- ===== 刷题 ===== -->
+  <section class="view" id="view-quiz">
+    <div class="quiz-top" id="quizTopBar"></div>
+    <div id="quizBody"></div>
+  </section>
+
+  <!-- ===== 速记卡片 ===== -->
+  <section class="view" id="view-cards">
+    <div id="cardsBody"></div>
+  </section>
+
+  <!-- ===== 统计 ===== -->
+  <section class="view" id="view-stats">
+    <div class="stat-grid">
+      <div class="stat-box"><b class="mono" id="statTotal">0</b><span>累计答题</span></div>
+      <div class="stat-box"><b class="mono" id="statCorrect">0</b><span>答对</span></div>
+      <div class="stat-box"><b class="mono" id="statRate">0%</b><span>正确率</span></div>
+      <div class="stat-box"><b class="mono" id="statWrong">0</b><span>错题数</span></div>
+    </div>
+    <div class="card">
+      <h2>各章正确率</h2>
+      <div class="bars" id="statsCh"></div>
+    </div>
+    <div class="card">
+      <h2>近 7 天做题量</h2>
+      <div class="days" id="statsDays"></div>
+    </div>
+  </section>
+</main>
+
+<!-- ===== 移动端底部 TabBar（≤860px 显示） ===== -->
+<nav class="tabbar" id="tabbar">
+  <button class="tb-item" data-tb="random"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M16 3h5v5"/><path d="M4 20 21 3"/><path d="M21 16v5h-5"/><path d="M15 15l6 6"/><path d="M4 4l5 5"/></svg>随机</button>
+  <button class="tb-item" data-tb="ch"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="16" rx="2"/><path d="M3 9h18"/><path d="M9 14h6"/></svg>章节</button>
+  <button class="tb-item" data-tb="wrong"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 14l-4-4 4-4"/><path d="M5 10h7a4 4 0 0 1 4 4v7"/></svg>错题</button>
+  <button class="tb-item" data-tb="fav"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2l3.1 6.3 6.9 1-5 4.9 1.2 6.9-6.2-3.3L5.8 21.1 7 14.2l-5-4.9 6.9-1z"/></svg>收藏</button>
+  <button class="tb-item" data-tb="stats"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 20V10"/><path d="M12 20V4"/><path d="M6 20v-6"/></svg>统计</button>
+</nav>
+<div class="ch-mask" id="chMask"></div>
+<div class="ch-sheet" id="chSheet">
+  <div class="ch-sheet-head"><span>选择章节刷题</span><button class="ch-sheet-close" id="chSheetClose" aria-label="关闭"><svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M18 6 6 18"/><path d="m6 6 12 12"/></svg></button></div>
+  <div class="ch-sheet-grid" id="chSheetGrid"></div>
+</div>
+
+<div class="footer">
+  <span>本地记录自动保存 · 换设备不丢失可导出浏览器数据</span>
+  <div><button class="danger-zone" id="btnReset">清空全部记录</button></div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script id="qdata" type="application/json">[{"ch":1,"type":"mcq","q":"电力电子技术是指____。","opts":["仅指电力电子器件的制造技术","使用电力电子器件对电能进行变换、控制和优化的技术","处理信息的电子技术","只研究交-直流变换的模拟电子技术"],"ans":1,"expl":"电力电子技术：使用电力电子器件对电能进行变换、控制和优化的技术，即应用于电力领域的电子技术。","id":"q1"},{"ch":1,"type":"mcq","q":"电力变换四大类中，交流变直流称为____。","opts":["逆变","直流斩波","整流","变频"],"ans":2,"expl":"交→直为整流；直→交为逆变；直→直为直流斩波；交→交为调压、变频、变相。","id":"q2"},{"ch":1,"type":"fill","q":"电力变换四大类中，交流变直流称为____。","ans":"整流","expl":"交→直变换即整流，是出现最早的电力电子电路。","id":"q3"},{"ch":1,"type":"fill","q":"电力变换四大类中，直流变交流称为____。","ans":"逆变","expl":"直→交变换即逆变，是有源逆变和无源逆变的基础概念。","id":"q4"},{"ch":1,"type":"fill","q":"电力变换四大类中，直流变直流称为____。","ans":"直流斩波","expl":"直→直变换即直流斩波（DC Chopper），也称直流-直流变换器。","id":"q5"},{"ch":1,"type":"mcq","q":"电力电子技术分为两大分支：电力电子器件制造技术是电力电子技术的____，其理论基础是____；变流技术是电力电子技术的____，其理论基础是____。","opts":["基础／半导体物理；核心／电路理论","核心／电路理论；基础／半导体物理","基础／电路理论；核心／半导体物理","核心／半导体物理；基础／电路理论"],"ans":0,"expl":"器件制造技术是基础，理论基础是半导体物理；变流技术（器件应用技术）是核心，理论基础是电路理论。","id":"q6"},{"ch":1,"type":"mcq","q":"1974年，美国W. Newell用倒三角形认为，电力电子学是由____三个学科交叉而形成的。","opts":["电力学、电子学和电机学","电子学、控制理论和数学","电力学、控制理论和计算机技术","电力学、电子学和控制理论"],"ans":3,"expl":"倒三角形描述：电力电子学由电力学、电子学、控制理论三个学科交叉形成。","id":"q7"},{"ch":1,"type":"mcq","q":"关于电力电子器件与信息电子器件的工作状态，下列说法正确的是____。","opts":["电力电子器件一般工作在放大状态","信息电子电路的器件可工作在开关状态和放大状态，电力电子电路的器件一般只工作在开关状态","两者都只工作在放大状态","两者都只工作在开关状态"],"ans":1,"expl":"二者同根同源，但电力电子电路器件一般只工作在开关状态，以减小损耗。","id":"q8"},{"ch":1,"type":"mcq","q":"电力电子技术是弱电控制强电的技术，是弱电和强电的接口，____是这种接口的有力纽带。","opts":["电路理论","半导体物理","控制理论","电磁场理论"],"ans":2,"expl":"控制理论广泛用于电力电子系统，是弱电控制强电的接口纽带；电力电子装置是自动化技术的基础元件和重要支撑技术。","id":"q9"},{"ch":1,"type":"mcq","q":"关于电力电子技术变换的电力范围，下列说法正确的是____。","opts":["只能处理数百MW以上的大功率","只能处理数W以下的小功率","只能处理直流电","可大到数百MW甚至GW级，也可小到数W甚至mW级"],"ans":3,"expl":"电力电子技术变换的电力可大到数百MW甚至GW，也可小到数W甚至mW级。","id":"q10"},{"ch":1,"type":"mcq","q":"电力电子技术的发展史是以____的发展史为纲的。","opts":["电力电子器件","集成电路","电力电子系统","控制理论"],"ans":0,"expl":"从水银整流器时代、晶闸管时代到全控型器件迅速发展，均以器件发展为主线。","id":"q11"},{"ch":1,"type":"mcq","q":"电力电子器件的发展阶段按时间顺序排列，正确的是____。","opts":["晶闸管时代→电子管时代→全控型器件","全控型器件时代→晶闸管时代→水银整流器时代","电子管与水银（汞弧）整流器时代→晶闸管时代→全控型器件迅速发展","晶体管时代→晶闸管时代→电子管时代"],"ans":2,"expl":"史前期（黎明期）为电子管、水银整流器时代；1957年晶闸管问世进入晶闸管时代；20世纪80年代起全控型器件迅速发展。","id":"q12"},{"ch":1,"type":"mcq","q":"电力电子技术对节省电能意义重大，尤其在大型风机、水泵变频调速和照明电源方面效果显著，因此也被称为____。","opts":["节能技术","信息处理技术","新能源技术","电力安全技术"],"ans":0,"expl":"电力电子技术使电能使用更合理、高效、环保，被称为节能技术。","id":"q13"},{"ch":1,"type":"mcq","q":"发达国家的电能已有____经过电力电子技术处理，节能效果达到15%~40%。","opts":["50%","30%","95%","80%"],"ans":3,"expl":"发达国家电能已有80%经过电力电子技术处理；有文献预计到2050年经过处理再应用的电能将达到95%。","id":"q14"},{"ch":1,"type":"mcq","q":"大功率晶闸管和微机控制技术发展后，70年代出现的电力机车传动方式为____。","opts":["直—直传动（直流供电→直流电动机）","交—直—交传动（交流供电→硅整流→逆变器→交流电动机）","交—直传动（交流供电→硅整流→直流电动机）","交—交直接传动"],"ans":1,"expl":"大功率硅整流技术使传动由直—直变为交—直；大功率晶闸管和微机控制技术发展后，70年代出现交—直—交传动，即交流传动，取代交—直传动。","id":"q15"},{"ch":1,"type":"mcq","q":"电力电子装置提供给负载的是各种直流电源、恒频交流电源和变频交流电源，因此可以说电力电子技术研究的也就是____。","opts":["电机控制技术","信息处理技术","电网调度技术","电源技术"],"ans":3,"expl":"电力电子技术研究的也就是电源技术，其应用覆盖一般工业、交通运输、电力系统、电子装置电源、家用电器等。","id":"q16"},{"ch":2,"type":"mcq","q":"电力电子器件是指____。","opts":["用于信息处理的集成电路","只用于控制电路中的电子器件","可直接用于主电路中，实现电能的变换或控制的电子器件","仅指电力二极管的电子器件"],"ans":2,"expl":"电力电子器件可直接用于主电路，实现电能变换或控制；主电路是直接承担电能变换或控制任务的电路。","id":"q17"},{"ch":2,"type":"mcq","q":"电气设备或电力系统中，直接承担电能的变换或控制任务的电路称为____。","opts":["主电路","控制电路","驱动电路","保护电路"],"ans":0,"expl":"主电路直接承担电能变换或控制任务；控制、驱动、保护电路均服务于主电路。","id":"q18"},{"ch":2,"type":"mcq","q":"电力电子器件一般都工作在____状态。","opts":["放大","开关","线性","截止"],"ans":1,"expl":"电力电子器件特征：能处理电功率的能力远大于信息电子器件；一般工作在开关状态；往往需要由信息电子电路控制；功率损耗大，一般需安装散热器。","id":"q19"},{"ch":2,"type":"mcq","q":"电力电子器件自身的功率损耗远大于信息电子器件，因此一般都要安装____。","opts":["滤波器","平波电抗器","避雷器","散热器"],"ans":3,"expl":"电力电子器件功率损耗大，一般都要安装散热器。","id":"q20"},{"ch":2,"type":"mcq","q":"____是器件功率损耗的主要成因；器件开关频率较高时，____可能成为器件功率损耗的主要因素。","opts":["断态损耗；通态损耗","通态损耗；开关损耗","开关损耗；通态损耗","通态损耗；断态损耗"],"ans":1,"expl":"电力电子器件损耗分为通态损耗、断态损耗、开关损耗（开通+关断）；通态损耗是主要成因，开关频率高时开关损耗上升为主要因素。","id":"q21"},{"ch":2,"type":"mcq","q":"电力电子系统由控制电路、驱动电路、保护电路和以____为核心的主电路组成。","opts":["电力变压器","储能电感","电力电子器件","滤波电容"],"ans":2,"expl":"电力电子系统以电力电子器件为核心，辅以控制、驱动、保护电路；保护电路附加在主电路和控制电路中。","id":"q22"},{"ch":2,"type":"mcq","q":"通过控制信号可以控制其导通而不能控制其关断的器件称为____，典型代表是____。","opts":["半控型器件；晶闸管","全控型器件；IGBT","不可控器件；电力二极管","电压驱动型器件；MOSFET"],"ans":0,"expl":"半控型器件（Thyristor）只能控制导通不能控制关断；全控型器件（IGBT、MOSFET）既可控制导通又可控制关断，又称自关断器件；不可控器件（电力二极管）不能用控制信号控制通断。","id":"q23"},{"ch":2,"type":"mcq","q":"通过控制信号既可控制其导通又可控制其关断的器件称为____，又称自关断器件，例如____。","opts":["半控型器件；晶闸管","全控型器件；IGBT、电力MOSFET","不可控器件；电力二极管","电流驱动型器件；GTO"],"ans":1,"expl":"全控型器件又称自关断器件，典型为IGBT、电力MOSFET等。","id":"q24"},{"ch":2,"type":"mcq","q":"不可控器件不能用控制信号来控制其通断，因此也就不需要____。","opts":["保护电路","散热器","驱动电路","主电路"],"ans":2,"expl":"不可控器件（如电力二极管）不能由控制信号控制通断，不需要驱动电路。","id":"q25"},{"ch":2,"type":"mcq","q":"按照驱动电路信号的性质分类，电流驱动型器件包括____。","opts":["电力二极管、晶闸管、GTO、GTR","电力MOSFET、IGBT","电力MOSFET、晶闸管","IGBT、GTR"],"ans":0,"expl":"电流驱动型通过从控制端注入或抽出电流实现通断控制，包括电力二极管、晶闸管、GTO、GTR；电压驱动型（MOSFET、IGBT）仅施加电压信号即可。","id":"q26"},{"ch":2,"type":"fill","q":"按照驱动电路信号的性质分类，电压驱动型器件包括____和____。","ans":"MOSFET、IGBT","accept":["电力MOSFET、IGBT","MOSFET和IGBT","电力MOSFET和IGBT"],"expl":"电压驱动型仅通过在控制端和公共端之间施加电压信号即可实现导通或关断控制，典型为电力MOSFET和IGBT。","id":"q27"},{"ch":2,"type":"mcq","q":"电力二极管N-层的掺杂浓度很低、电阻率很高，具有较高的耐压能力，但会导致____升高，两者是矛盾的。","opts":["反向漏电流","开关损耗","结电容","通态压降"],"ans":3,"expl":"N-层低掺杂、高电阻率带来高耐压，但导致通态压降升高；正偏大电流时电导调制效应使N-区电阻率明显降低。","id":"q28"},{"ch":2,"type":"mcq","q":"电力二极管正偏且正向电流大时，空穴进入N-区并积累，为维持半导体中性条件电子浓度也增大，使N-区电阻率明显降低，这种现象称为____。","opts":["雪崩效应","齐纳效应","电容效应","电导调制效应"],"ans":3,"expl":"电导调制效应使大电流下N-区电阻率降低、通态压降减小，是双极型器件通态压降低的重要原因。","id":"q29"},{"ch":2,"type":"mcq","q":"PN结的反向击穿有两种形式，分别为____。","opts":["热击穿和电导击穿","雪崩击穿和电导调制","雪崩击穿和齐纳击穿","齐纳击穿和热击穿"],"ans":2,"expl":"PN结反向击穿有雪崩击穿和齐纳击穿两种形式，均可能导致热击穿损坏。","id":"q30"},{"ch":2,"type":"mcq","q":"PN结的结电容按其产生机制和作用分为势垒电容CB和扩散电容CD，其中____由多子电荷变化造成，____由少子造成（高频下不起作用）。","opts":["CD；CB","CB；CD","CB；CB","CD；CD"],"ans":1,"expl":"势垒电容CB由多子电荷变化造成；扩散电容CD由少子造成，故在高频下不起作用。","id":"q31"},{"ch":2,"type":"mcq","q":"电力二极管静态特性中，正向电流IF开始明显增加所对应的电压称为____。","opts":["门槛电压UTO","正向电压降UF","反向击穿电压","正向恢复电压UFP"],"ans":0,"expl":"门槛电压UTO是正向电流开始明显增加对应的电压；与IF对应的二极管两端电压为正向电压降UF。","id":"q32"},{"ch":2,"type":"mcq","q":"电力二极管关断过程中，延迟时间td=t1-t0，电流下降时间tf=t2-t1，则反向恢复时间trr等于____。","opts":["td-tf","td+tf","tf/td","td×tf"],"ans":1,"expl":"trr=td+tf；恢复系数为下降时间与延迟时间的比值tf/td。","id":"q33"},{"ch":2,"type":"mcq","q":"电力二极管的恢复系数定义为____。","opts":["下降时间与延迟时间的比值tf/td","延迟时间与下降时间的比值td/tf","反向恢复时间与延迟时间之比","正向压降与反向电压之比"],"ans":0,"expl":"恢复系数=下降时间tf/延迟时间td。","id":"q34"},{"ch":2,"type":"mcq","q":"电力二极管的正向平均电流IF(AV)是在指定管壳温度和散热条件下，允许流过的最大____电流的平均值。","opts":["工频正弦全波","直流","工频正弦半波","任意波形"],"ans":2,"expl":"IF(AV)按电流的发热效应定义，使用时应按有效值相等的原则选取电流定额，并留有一定裕量。","id":"q35"},{"ch":2,"type":"mcq","q":"电力二极管的反向重复峰值电压URRM在使用时，应当留有的裕量倍数为____。","opts":["一倍","三倍以上","无需裕量","两倍"],"ans":3,"expl":"URRM为对电力二极管所能重复施加的反向最高峰值电压，使用时应当留有两倍裕量。","id":"q36"},{"ch":2,"type":"fill","q":"电力二极管最高工作结温TJM通常在____℃范围之内。","ans":"125~175","accept":["125～175","125-175","125~175℃","125～175℃","125-175℃"],"expl":"TJM是在PN结不致损坏前提下能承受的最高平均温度，通常在125~175℃范围。","id":"q37"},{"ch":2,"type":"mcq","q":"普通整流二极管多用于开关频率不高（____以下）的整流电路，其反向恢复时间较长（>5μs）。","opts":["10kHz","1kHz","100kHz","1MHz"],"ans":1,"expl":"普通二极管（整流二极管）用于1kHz以下的整流电路，反向恢复时间较长，但电流、电压定额可做得很高。","id":"q38"},{"ch":2,"type":"mcq","q":"快恢复二极管（FRD）的反向恢复时间trr更短，可低于____，但其反向耐压多在1200V以下。","opts":["50ns","500ns","5μs","50μs"],"ans":0,"expl":"快恢复外延二极管trr可低于50ns、UF约0.9V；超快速恢复等级trr在100ns以下，甚至达20~30ns。","id":"q39"},{"ch":2,"type":"mcq","q":"肖特基二极管是以____接触形成的势垒为基础的二极管，不是PN结原理。","opts":["金属和金属","半导体和半导体","半导体和绝缘体","金属和半导体"],"ans":3,"expl":"以金属和半导体接触形成的势垒为基础的二极管称为肖特基势垒二极管（SBD）。","id":"q40"},{"ch":2,"type":"mcq","q":"肖特基二极管是多数载流子导电器件，不存在少数载流子存储和反向恢复问题，其反向恢复时间只取决于电容充放电，约为____。","opts":["100~400ns","1~5μs","10~40ns","10~40μs"],"ans":2,"expl":"肖特基二极管反向恢复快（10~40ns），正向恢复无明显电压过冲，正向压降比PN结约低0.2V，开关频率高。","id":"q41"},{"ch":2,"type":"mcq","q":"下列关于肖特基二极管特点的说法中，错误的是____。","opts":["反向恢复快","正向压降低","反向漏电流大","反向击穿电压很高"],"ans":3,"expl":"肖特基二极管弱点是反向击穿电压很低（约60~100V）、反向漏电流大、损耗大。","id":"q42"},{"ch":2,"type":"mcq","q":"1956年美国贝尔实验室发明了____，1957年美国通用电气公司开发出第一只产品，开辟了电力电子技术迅速发展的崭新时代。","opts":["电力二极管","IGBT","晶闸管","电力MOSFET"],"ans":2,"expl":"晶闸管1956年由贝尔实验室发明，1957年由美国通用电气公司开发出第一只产品，1958年商业化。","id":"q43"},{"ch":2,"type":"mcq","q":"晶闸管有三个联接端A、K、G，分别称为____。","opts":["集电极、发射极、基极","阳极、阴极、门极","漏极、源极、栅极","阳极、门极、阴极"],"ans":1,"expl":"晶闸管为PNPN四层结构，三端为阳极A、阴极K和门极G。","id":"q44"},{"ch":2,"type":"mcq","q":"晶闸管由阻断转为导通，必须同时具备的条件是____。","opts":["承受正向阳极电压，且门极注入触发电流","承受反向阳极电压，门极注入触发电流","仅承受正向阳极电压即可","仅门极注入触发电流即可"],"ans":0,"expl":"承受正向电压时仅在门极有触发电流的情况下才能开通；门极触发是最精确、迅速而可靠的控制手段。","id":"q45"},{"ch":2,"type":"mcq","q":"光触发可以保证控制电路与主电路之间的良好绝缘而应用于高压电力设备中，这种晶闸管称为____。","opts":["光敏二极管","光电耦合晶闸管","光触发GTO","光控晶闸管（LTT）"],"ans":3,"expl":"光触发应用于高压设备中，称为光控晶闸管（Light Triggered Thyristor——LTT）。","id":"q46"},{"ch":2,"type":"mcq","q":"晶闸管正常工作特性中，承受反向电压时，不论门极是否有触发电流，晶闸管____导通。","opts":["都会","都不会","都可能","只在门极有电流时才"],"ans":1,"expl":"承受反向电压时晶闸管不会导通；承受正向电压时仅门极有触发电流才开通；一旦导通门极即失去控制作用。","id":"q47"},{"ch":2,"type":"mcq","q":"晶闸管一旦导通，门极就____控制作用。","opts":["失去","保持","增强","部分失去"],"ans":0,"expl":"晶闸管导通后门极失去控制作用；要使晶闸管关断，可向阳极注入负电流或在A-K之间施加负电压。","id":"q48"},{"ch":2,"type":"fill","q":"要使晶闸管关断，可向阳极注入____或在A-K之间施加负电压。","ans":"负电流","expl":"晶闸管一旦导通门极失去控制，关断需阳极注入负电流或在A-K间施加负电压。","id":"q49"},{"ch":2,"type":"mcq","q":"晶闸管的额定电压通常取UDRM和URRM中____的标值；选用时一般取正常工作时晶闸管所承受峰值电压的____倍。","opts":["较大；2~3","较小；1~1.5","较小；2~3","较大；1~1.5"],"ans":2,"expl":"通常取UDRM、URRM中较小的标值作为额定电压；选用时取正常工作峰值电压的2~3倍。","id":"q50"},{"ch":2,"type":"mcq","q":"晶闸管通态平均电流IT(AV)是在环境温度为40℃和规定的冷却状态下，稳定结温不超过额定结温时所允许流过的最大____电流的平均值，使用时按____相等的原则选取。","opts":["工频正弦半波；平均值","直流；峰值","工频正弦半波；有效值","任意波形；有效值"],"ans":2,"expl":"IT(AV)标称额定电流参数，按电流发热效应定义，使用时按有效值相等原则选取。","id":"q51"},{"ch":2,"type":"mcq","q":"断态电压临界上升率du/dt是指在额定结温和门极开路情况下，不导致晶闸管从断态到通态转换的外加电压最大上升率。电压上升率过大，会使____，导致晶闸管误导通。","opts":["局部过热","充电电流足够大","反向击穿","门极损坏"],"ans":1,"expl":"电压上升率过大→充电电流足够大→晶闸管误导通。","id":"q52"},{"ch":2,"type":"mcq","q":"通态电流临界上升率di/dt指晶闸管能承受而无有害影响的最大通态电流上升率。如果电流上升太快，可能造成____而使晶闸管损坏。","opts":["误导通","门极烧毁","电压击穿","局部过热"],"ans":3,"expl":"电流上升太快可能造成局部过热而使晶闸管损坏。","id":"q53"},{"ch":2,"type":"mcq","q":"晶闸管开通时间tgt为延迟时间td与上升时间tr之和，其中延迟时间td约为____。","opts":["0.5~1.5μs","0.5~3μs","几十纳秒","几百微秒"],"ans":0,"expl":"延迟时间td约0.5~1.5μs，上升时间tr约0.5~3μs，开通时间tgt=td+tr。","id":"q54"},{"ch":2,"type":"mcq","q":"晶闸管关断时间tq=trr+tgr，普通晶闸管的关断时间约为____。","opts":["几百微秒","几十纳秒","几秒","几毫秒"],"ans":0,"expl":"普通晶闸管关断时间约几百微秒；在正向阻断恢复时间tgr内重新施加正压，即使没有触发仍会导通。","id":"q55"},{"ch":2,"type":"mcq","q":"电力MOSFET是____型器件，无电导调制效应，开关速度快、工作频率高；但导通电阻高、导通压降大、功耗大，用于功率不超过____的场合。","opts":["双极；10kW","单极；100kW","单极；10kW","双极；100kW"],"ans":2,"expl":"电力MOSFET是单极型（仅电子导电），开关快、频率高，但导通电阻高，用于功率不超过10kW的场合。","id":"q56"},{"ch":2,"type":"mcq","q":"电力MOSFET主要是____沟道____型器件。","opts":["P；增强","N；耗尽","P；耗尽","N；增强"],"ans":3,"expl":"电力MOSFET按导电沟道分P沟道和N沟道，主要是N沟道增强型。","id":"q57"},{"ch":2,"type":"mcq","q":"电力MOSFET的开关时间在____之间，工作频率可达100kHz以上，是主要电力电子器件中最高的。","opts":["0.5~1.5μs","10~100ns","几百微秒","1~10ms"],"ans":1,"expl":"MOSFET无少子储存效应，关断迅速，开关时间10~100ns，工作频率可达100kHz以上。","id":"q58"},{"ch":2,"type":"mcq","q":"电力MOSFET的通态电阻具有____温度系数，对器件并联时的均流有利。","opts":["正","负","零","非线性"],"ans":0,"expl":"通态电阻正温度系数→并联时电流自动均衡，容易并联（第9章再强化）。","id":"q59"},{"ch":2,"type":"mcq","q":"电力MOSFET的栅源电压UGS超过____将导致绝缘层击穿。","opts":["5V","50V","20V","100V"],"ans":2,"expl":"|UGS|>20V将导致绝缘层击穿，正常工作uGS=0~+15V。","id":"q60"},{"ch":2,"type":"mcq","q":"电力MOSFET的开关速度与输入电容Cin的充放电有很大关系，可____驱动电路内阻Rs减小时间常数以加快开关速度；开关频率越高，所需驱动功率____。","opts":["提高；越大","降低；越小","提高；越小","降低；越大"],"ans":3,"expl":"MOSFET为场控器件，静态几乎不需输入电流，但开关过程中需对输入电容充放电，频率越高所需驱动功率越大。","id":"q61"},{"ch":2,"type":"mcq","q":"IGBT是____与____复合而成的器件，结合了二者的优点。","opts":["晶闸管和电力MOSFET","GTR和电力MOSFET","GTO和电力MOSFET","GTR和GTO"],"ans":1,"expl":"IGBT由GTR（双极型、电流驱动、有电导调制效应）与MOSFET（单极型、电压驱动、开关快）复合，1986年投入市场，是中小功率电力电子设备的主导器件。","id":"q62"},{"ch":2,"type":"mcq","q":"IGBT在结构上比VDMOSFET多一层____，使其具有很强的通流能力。","opts":["N+注入区","埋层","P+注入区","外延层"],"ans":2,"expl":"N沟道VDMOSFET与GTR组合成N沟道IGBT，比VDMOSFET多一层P+注入区，通流能力强。","id":"q63"},{"ch":2,"type":"mcq","q":"IGBT是场控器件，通断由栅射极电压uGE决定。关断时，栅射极间施加____，MOSFET内沟道消失，晶体管基极电流被切断，IGBT关断。","opts":["正向电压","触发电流","负向电流","零压或反压"],"ans":3,"expl":"uGE=-15V~+15V；uGE大于开启电压UGE(th)时导通，施加零压或反压时关断。","id":"q64"},{"ch":2,"type":"mcq","q":"使IGBT开通的驱动电压一般为____。","opts":["10~15V","15~20V","5~10V","20~25V"],"ans":1,"expl":"使MOSFET开通的驱动电压一般10~15V，使IGBT开通的驱动电压一般15~20V。","id":"q65"},{"ch":2,"type":"fill","q":"IGBT关断时施加一定幅值的负驱动电压（一般取____V）有利于减小关断时间和关断损耗。","ans":"-5~-15","accept":["-5～-15","-5到-15","-5V~-15V","-5V～-15V"],"expl":"关断时施加-5~-15V负驱动电压，可减小关断时间和关断损耗。","id":"q66"},{"ch":2,"type":"mcq","q":"关于IGBT的特性和参数特点，下列说法错误的是____。","opts":["通态压降比VDMOSFET高","开关速度高、开关损耗小","相同定额时安全工作区比GTR大，耐脉冲电流冲击","输入阻抗高，输入特性与MOSFET类似"],"ans":0,"expl":"IGBT通态压降比VDMOSFET低（P+区、电导调制效应），开关速度高、损耗小，输入阻抗高。","id":"q67"},{"ch":2,"type":"mcq","q":"IGBT往往与反并联的____封装在一起制成模块，成为逆导器件。","opts":["快速二极管","普通二极管","晶闸管","电容器"],"ans":0,"expl":"IGBT常与反并联快速二极管封装成模块，成为逆导器件。","id":"q68"},{"ch":2,"type":"mcq","q":"电力电子器件类型归纳中，单极型器件包括____。","opts":["电力二极管、晶闸管","MOSFET、SIT","GTO、GTR","IGBT、MCT"],"ans":1,"expl":"单极型：MOSFET、SIT；双极型：电力二极管、晶闸管、GTO、GTR、SITH；复合型：IGBT、MCT。","id":"q69"},{"ch":2,"type":"mcq","q":"电流驱动型器件（双极型器件中除SITH外）的特点是____。","opts":["输入阻抗高、所需驱动功率小","驱动电路简单、工作频率高","具有电导调制效应，通态压降低、导通损耗小，但工作频率较低、所需驱动功率大、驱动电路较复杂","无电导调制效应，开关速度快"],"ans":2,"expl":"电流驱动型（双极型）器件有电导调制效应，通态压降低、损耗小，但频率低、驱动功率大、电路复杂。","id":"q70"},{"ch":2,"type":"mcq","q":"当前电力电子器件格局中，____为兆瓦以上首选（制造水平6kV/6kA），____为兆瓦以下首选（第四代产品，制造水平2.5kV/1.8kA）。","opts":["IGBT；GTO","光控晶闸管；GTO","IGBT；电力MOSFET","GTO；IGBT"],"ans":3,"expl":"GTO兆瓦以上首选，制造水平6kV/6kA；IGBT兆瓦以下首选，第四代产品2.5kV/1.8kA；光控晶闸管功率更大（8kV/3.5kA），装置容量最大。","id":"q71"},{"ch":2,"type":"fill","q":"作业真题：在GTR、GTO、IGBT与MOSFET中，开关速度最快的是____。","ans":"MOSFET","accept":["电力MOSFET","MOSFET"],"expl":"MOSFET无少子储存效应，开关速度最快，工作频率可达100kHz以上。","id":"q72"},{"ch":2,"type":"fill","q":"作业真题：在GTR、GTO、IGBT与MOSFET中，单管输出功率最大的是____。","ans":"GTO","expl":"GTO为兆瓦以上首选，制造水平6kV/6kA，单管输出功率最大。","id":"q73"},{"ch":2,"type":"fill","q":"作业真题：在下列几种电力电子器件中（晶闸管、MOSFET、IGBT），能承受电压和电流容量最高的是____。","ans":"晶闸管","expl":"晶闸管能承受的电压和电流容量最高，工作可靠，在大容量场合具有重要地位。","id":"q74"},{"ch":2,"type":"fill","q":"作业真题：下列器件中（晶闸管、MOSFET、IGBT），工作频率最高的器件是____。","ans":"MOSFET","expl":"MOSFET开关时间10~100ns，工作频率可达100kHz以上，是主要电力电子器件中最高的。","id":"q75"},{"ch":2,"type":"fill","q":"作业真题：肖特基二极管的开关损耗比快速二极管____（大、小）。","ans":"小","expl":"肖特基二极管反向恢复快、正向压降低，开关损耗和正向导通损耗都比快速二极管还小。","id":"q76"},{"ch":2,"type":"fill","q":"作业真题：绝缘栅双极晶体管的简称是____。","ans":"IGBT","expl":"绝缘栅双极晶体管（Insulated-gate Bipolar Transistor）简称IGBT。","id":"q77"},{"ch":2,"type":"fill","q":"作业真题：门极可关断晶闸管的简称是____。","ans":"GTO","expl":"门极可关断晶闸管（Gate Turn-Off Thyristor）简称GTO，属全控型器件。","id":"q78"},{"ch":2,"type":"mcq","q":"作业真题：MOS管应用中，栅源极间接入电阻RGS的作用是____。","opts":["限制漏极电流，起过流保护作用","提高电路的电压放大倍数","当MOS管关断时，为输入结电容放电提供回路","为栅极提供偏置电压"],"ans":2,"expl":"RGS在MOS管关断时为输入结电容放电提供回路；输入ui为高电平时MOS管导通，输出uo为0V。","id":"q79"},{"ch":3,"type":"mcq","q":"整流电路是____的电力电子电路，其作用是将交流电变为直流电。","opts":["出现最晚","出现最早","应用最少","只能用于小功率"],"ans":1,"expl":"整流电路是出现最早的电力电子电路，将交流电变为直流电。","id":"q80"},{"ch":3,"type":"mcq","q":"整流电路按组成的器件可分为不可控、半控、全控三种；按交流输入相数分为____。","opts":["桥式电路和零式电路","单拍电路和双拍电路","电压型和电流型电路","单相电路和多相电路"],"ans":3,"expl":"按器件分：不可控、半控、全控；按结构分：桥式、零式；按相数分：单相、多相；按变压器二次侧电流方向分：单拍、双拍。","id":"q81"},{"ch":3,"type":"mcq","q":"通过控制触发脉冲的相位来控制直流输出电压大小的方式称为____，简称相控方式。","opts":["相位控制方式","斩波控制方式","PWM控制方式","频率控制方式"],"ans":0,"expl":"通过控制触发脉冲相位控制输出电压大小，称相位控制方式（相控方式）。","id":"q82"},{"ch":3,"type":"mcq","q":"触发延迟角α定义为____。","opts":["晶闸管在一个电源周期中处于通态的电角度","从电源过零到晶闸管关断的电角度","从触发脉冲出现到晶闸管导通的电角度","从晶闸管开始承受正向阳极电压起到施加触发脉冲止的电角度"],"ans":3,"expl":"触发延迟角（触发角、控制角）α：从晶闸管开始承受正向阳极电压起到施加触发脉冲止的电角度；导通角θ是晶闸管一个周期中处于通态的电角度。","id":"q83"},{"ch":3,"type":"mcq","q":"单相半波可控整流电路带电阻负载时，α角的移相范围为____。","opts":["90°","120°","180°","150°"],"ans":2,"expl":"单相半波可控整流电阻负载移相范围180°；该电路输出脉动大、变压器铁芯直流磁化，实际很少应用。","id":"q84"},{"ch":3,"type":"mcq","q":"单相半波可控整流电路的主要缺点是____。","opts":["输出脉动大，变压器二次侧电流含直流分量，造成变压器铁芯直流磁化","电路结构复杂","晶闸管数量多","无法实现相控"],"ans":0,"expl":"单相半波电路简单但输出脉动大，二次侧电流含直流分量造成铁芯直流磁化，实际很少应用；分析它主要是建立整流电路基本概念。","id":"q85"},{"ch":3,"type":"mcq","q":"单相桥式全控整流电路带电阻负载时，α角的移相范围为____。","opts":["90°","180°","120°","150°"],"ans":1,"expl":"单相桥式全控整流：电阻负载移相范围180°，阻感负载移相范围90°。","id":"q86"},{"ch":3,"type":"mcq","q":"单相桥式全控整流电路带电阻负载时，流过每个晶闸管的电流平均值是输出直流平均电流的____。","opts":["四分之一","三分之一","相等","一半"],"ans":3,"expl":"桥式电路中两对桥臂轮流导通，每个晶闸管电流平均值为输出直流平均值的一半。","id":"q87"},{"ch":3,"type":"mcq","q":"单相桥式全控整流电路带阻感负载（大电感）时，α角的移相范围为____，晶闸管导通角θ与α无关，均为____。","opts":["90°；180°","180°；90°","90°；120°","180°；180°"],"ans":0,"expl":"阻感负载大电感时移相范围90°；晶闸管导通角θ=180°，与α无关。","id":"q88"},{"ch":3,"type":"mcq","q":"单相桥式全控整流电路带阻感负载时，变压器二次侧电流i2的波形为____，有效值I2=Id。","opts":["正弦波","正负各180°的矩形波","脉动直流","三角波"],"ans":1,"expl":"大电感负载时id近似水平线，i2为正负各180°的矩形波，相位由α决定。","id":"q89"},{"ch":3,"type":"mcq","q":"单相桥式全控整流电路晶闸管承受的最大正、反向电压均为____。","opts":["2√2U2","√6U2","√2U2","2U2"],"ans":2,"expl":"单相全控桥晶闸管承受的最大正反向电压为变压器二次电压峰值√2U2；单相全波电路为2√2U2。","id":"q90"},{"ch":3,"type":"mcq","q":"单相桥式全控整流电路带反电动势负载时，晶闸管提前停止导电的电角度δ称为____；若出现电流断续，电动机机械特性将很软，为此可串联____。","opts":["换相重叠角；滤波电容","停止导电角；续流二极管","停止导电角；平波电抗器","逆变角；平波电抗器"],"ans":2,"expl":"反电动势负载时id=(ud-E)/R，至|u2|=E时id降为0，提前电角度δ停止导电；电流断续使机械特性软，串平波电抗器保证电流连续。","id":"q91"},{"ch":3,"type":"mcq","q":"单相全波可控整流电路与单相全控桥相比，下列说法正确的是____。","opts":["需要4个晶闸管，承受电压相同","只用2个晶闸管，但晶闸管承受的最大电压是单相全控桥的2倍","导电回路含2个晶闸管，管压降多1个","变压器结构简单、材料消耗少"],"ans":1,"expl":"单相全波只用2个晶闸管（少2个门极驱动电路），晶闸管承受最大电压为全控桥的2倍；导电回路只含1个晶闸管，管压降少1个，有利于低输出电压场合。","id":"q92"},{"ch":3,"type":"mcq","q":"单相桥式半控整流电路带阻感负载时，若无续流二极管VDR，当α突然增大至180°或触发脉冲丢失时，会发生____现象。","opts":["失控","逆变失败","换相失败","直通"],"ans":0,"expl":"无VDR时，α突增到180°或触发脉冲丢失→一个晶闸管持续导通、两个二极管轮流导通，ud成为正弦半波、平均值保持恒定，称为失控。","id":"q93"},{"ch":3,"type":"mcq","q":"单相桥式半控整流电路中续流二极管VDR的作用是____。","opts":["提高输出电压","使电路能实现有源逆变","减小晶闸管承受的反向电压","避免可能发生的失控现象，且续流期间导电回路只有一个管压降，有利于降低损耗"],"ans":3,"expl":"VDR承担续流，避免失控；续流期间回路只有一个管压降，损耗小。","id":"q94"},{"ch":3,"type":"mcq","q":"三相半波可控整流电路中，变压器一次侧接成____形（避免3次谐波流入电网），二次侧接成____形（得到零线），三个晶闸管为共阴极接法。","opts":["星；三角","三角；三角","三角；星","星；星"],"ans":2,"expl":"一次侧接三角形避免3次谐波流入电网，二次侧接星形得到零线；三管共阴极接法。","id":"q95"},{"ch":3,"type":"mcq","q":"三相半波可控整流电路中，各相晶闸管能触发导通的最早时刻称为____，作为计算触发角α的起点（α=0°）。","opts":["强制换相点","自然换相点","停止导电点","过零点"],"ans":1,"expl":"二极管换相时刻为自然换相点，是各相晶闸管能触发导通的最早时刻，即α=0°的起点。","id":"q96"},{"ch":3,"type":"mcq","q":"三相半波可控整流电路带电阻负载时，α角的移相范围为____；带阻感负载（大电感）时为____。","opts":["150°；90°","90°；150°","120°；90°","150°；120°"],"ans":0,"expl":"三相半波：电阻负载移相范围150°（α>30°时电流断续），阻感负载90°（α>30°时ud出现负部分）。","id":"q97"},{"ch":3,"type":"mcq","q":"三相半波可控整流电路，α=30°时负载电流处于____状态。","opts":["完全连续","完全断续","短路","连续和断续之间的临界"],"ans":3,"expl":"电阻负载α=30°是连续与断续的临界状态；α>30°时电流断续，晶闸管导通角小于120°。","id":"q98"},{"ch":3,"type":"mcq","q":"三相半波可控整流电路，晶闸管承受的最大反向电压为变压器二次____峰值，最大正向电压为二次____峰值（α=60°时）。","opts":["相电压；线电压","线电压；相电压","线电压；线电压","相电压；相电压"],"ans":1,"expl":"三相半波最大反向电压为线电压峰值√6U2，最大正向电压为相电压峰值√2U2（α=60°时）。","id":"q99"},{"ch":3,"type":"mcq","q":"三相半波可控整流电路的主要缺点是____，为此应用较少。","opts":["晶闸管承受电压太低","输出电压脉动太小","变压器二次电流中含有直流分量","电路结构过于复杂"],"ans":2,"expl":"三相半波变压器二次绕组电流有直流分量，造成铁芯直流磁化等问题，应用较少。","id":"q100"},{"ch":3,"type":"mcq","q":"三相桥式全控整流电路是应用最为广泛的整流电路，其导通顺序为____。","opts":["1-2-3-4-5-6","1-3-5-2-4-6","1-4-2-5-3-6","1-6-2-4-3-5"],"ans":0,"expl":"三相桥式全控共阴极组1、3、5，共阳极组4、6、2，按1-2-3-4-5-6顺序导通，相位依次差60°。","id":"q101"},{"ch":3,"type":"mcq","q":"三相桥式全控整流电路带电阻负载时，α角的移相范围为____；带阻感负载（大电感）时为____。","opts":["90°；120°","150°；90°","120°；150°","120°；90°"],"ans":3,"expl":"三相桥式全控：电阻负载移相范围120°（α>60°时ud每60°有一段为零且不出现负值），阻感负载90°。","id":"q102"},{"ch":3,"type":"mcq","q":"三相桥式全控整流电路中，任何时刻需2个晶闸管同时导通形成供电回路，其中共阴极组和共阳极组各1个，且____。","opts":["必须为同一相器件","不能为同一相器件","必须为相邻相器件","无此限制"],"ans":1,"expl":"2管同时导通，共阴、共阳各1，且不能为同一相器件。","id":"q103"},{"ch":3,"type":"mcq","q":"三相桥式全控整流电路的触发脉冲按1-2-3-4-5-6顺序相位依次差____；同一相的上下两个桥臂（如14、36、52）脉冲相差____。","opts":["120°；60°","60°；120°","60°；180°","120°；180°"],"ans":2,"expl":"触发脉冲相位依次差60°；共阴极组1、3、5依次差120°，共阳极组4、6、2依次差120°；同一相上下桥臂差180°。","id":"q104"},{"ch":3,"type":"mcq","q":"三相桥式全控整流电路ud一个周期脉动6次，每次脉动的波形都一样，故该电路为____整流电路。","opts":["6脉波","3脉波","12脉波","单脉波"],"ans":0,"expl":"三相桥式全控为6脉波整流电路，共阴极组与共阳极组各贡献3个波头。","id":"q105"},{"ch":3,"type":"mcq","q":"三相桥式全控整流电路为保证同时导通的2个晶闸管均有触发脉冲，可采用宽脉冲触发或____（常用）。","opts":["单窄脉冲触发","强脉冲触发","连续脉冲触发","双窄脉冲触发"],"ans":3,"expl":"宽脉冲触发或双窄脉冲触发（常用），双窄脉冲即在本相基本脉冲后再补一个滞后60°的添补脉冲。","id":"q106"},{"ch":3,"type":"mcq","q":"三相桥式全控整流电路带阻感负载（电流连续）时，整流电压平均值Ud=____。","opts":["1.17U2cosα","0.9U2cosα","2.34U2cosα","2.34U2(1+cosα)/2"],"ans":2,"expl":"三相桥式全控连续时Ud=2.34U2cosα；电阻负载α>60°时Ud=2.34U2[1+cos(α+60°)]/2。","id":"q107"},{"ch":3,"type":"mcq","q":"三相半波可控整流电路带阻感负载（电流连续）时，整流电压平均值Ud=____。","opts":["2.34U2cosα","0.675U2[1+cos(α+30°)]","0.9U2cosα","1.17U2cosα"],"ans":3,"expl":"三相半波连续时Ud=1.17U2cosα（α=0时最大为1.17U2）；电阻负载α>30°时用Ud=0.675U2[1+cos(α+30°)]。","id":"q108"},{"ch":3,"type":"mcq","q":"单相桥式全控整流电路带电阻负载时，整流电压平均值Ud=____。","opts":["0.45U2cosα","0.9U2(1+cosα)/2","1.17U2cosα","2.34U2cosα"],"ans":1,"expl":"单相桥式全控电阻负载Ud=0.9U2(1+cosα)/2；阻感负载大电感时Ud=0.9U2cosα。","id":"q109"},{"ch":3,"type":"mcq","q":"电容滤波的单相不可控整流电路，设计时根据负载情况选择电容C值，使输出电压Ud≈____。","opts":["1.2U2","0.9U2","1.414U2","2.34U2"],"ans":0,"expl":"空载时放电时间常数无穷大，输出电压最大（≈√2U2）；重载时趋近0.9U2；设计时取Ud≈1.2U2。","id":"q110"},{"ch":3,"type":"mcq","q":"电容滤波的单相桥式不可控整流电路中，流经电容的电流在一个周期内的平均值为零，所以Id=IR；每个二极管电流平均值ID=____。","opts":["Id","Id/3","Id/2","Id/4"],"ans":2,"expl":"单相桥式电容滤波：ID=Id/2=IR/2。","id":"q111"},{"ch":3,"type":"mcq","q":"电容滤波的三相桥式不可控整流电路中，每个二极管电流平均值为Id的____。","opts":["1/2","1/6","1/4","1/3"],"ans":3,"expl":"三相桥式电容滤波：ID=Id/3=IR/3；二极管承受的最大反向电压为线电压峰值。","id":"q112"},{"ch":3,"type":"mcq","q":"电容滤波的三相桥式不可控整流电路，空载时输出电压最大约为____，重载时输出电压平均值趋近____（相当于电阻负载特性）。","opts":["√6U2≈2.45U2；2.34U2","√2U2≈1.41U2；0.9U2","2.34U2；1.17U2","1.2U2；0.9U2"],"ans":0,"expl":"空载输出电压最大为线电压峰值√6U2≈2.45U2；随负载增加减小，重载趋近2.34U2（三相桥电阻负载特性）。","id":"q113"},{"ch":3,"type":"mcq","q":"带平衡电抗器的双反星形可控整流电路适用于____的场合。","opts":["高电压、小电流","低电压、大电流","高电压、大电流","低电压、小电流"],"ans":1,"expl":"双反星形电路适用于低电压、大电流场合；与三相桥式相比输出电流可大一倍。","id":"q114"},{"ch":3,"type":"mcq","q":"双反星形电路中平衡电抗器的作用是____。","opts":["保证两组三相半波整流电路能同时导电","消除铁芯直流磁化","提高输出电压","抑制谐波"],"ans":0,"expl":"平衡电抗器保证两组三相半波电路同时导电；两组绕组极性相反用于消除直流磁通势。","id":"q115"},{"ch":3,"type":"mcq","q":"双反星形电路若不加平衡电抗器，即成为六相半波整流电路，每管最大导通角为____，平均电流为Id/6，因变压器利用率低而极少采用。","opts":["120°","180°","60°","30°"],"ans":2,"expl":"六相半波每个时刻只有1个晶闸管导电，每管最大导通角60°，利用率低；加平衡电抗器后每管导通角为120°，两个管子同时导电。","id":"q116"},{"ch":3,"type":"mcq","q":"逆变是指____。","opts":["把交流电转变成直流电","把直流电转变成交流电，是整流的逆过程","把交流电压调小","把直流电压调高"],"ans":1,"expl":"逆变：把直流电转变成交流电，是整流的逆过程。","id":"q117"},{"ch":3,"type":"mcq","q":"有源逆变电路是交流侧____的逆变电路，应用于直流可逆调速系统、绕线转子异步电动机串级调速以及高压直流输电等。","opts":["直接接负载","接蓄电池","与变压器隔离","与电网连接"],"ans":3,"expl":"交流侧接电网为有源逆变；交流侧直接接负载为无源逆变（在第4章介绍）。","id":"q118"},{"ch":3,"type":"mcq","q":"产生有源逆变的条件是____。","opts":["α<π/2且直流侧电动势为正","直流侧存在反极性电动势且其值大于Ud，且控制角α>π/2使Ud为负值","直流侧接电阻负载","电路中含有续流二极管"],"ans":1,"expl":"逆变条件有二：直流电动势为负（反极性）且大于Ud；晶闸管控制角α>π/2使Ud为负值。","id":"q119"},{"ch":3,"type":"mcq","q":"半控桥或有续流二极管的电路____实现有源逆变，因为其整流电压ud不能出现负值。","opts":["能够","一定条件下能够","必须串联电感才能","不能"],"ans":3,"expl":"ud不能出现负值、直流侧也不允许出现负极性的电动势，故不能实现有源逆变；欲实现有源逆变只能采用全控电路。","id":"q120"},{"ch":3,"type":"mcq","q":"逆变角β与控制角α的关系为β=π-α。三相桥式电路工作于逆变状态时，逆变角β必须满足____才能保证换相结束后晶闸管能承受反压而关断。","opts":["β<γ","β=0","β>换相重叠角γ","β=γ/2"],"ans":2,"expl":"β>γ时换相结束晶闸管能承受反压关断；若β<γ，该关断的管子不能关断，最终导致逆变失败。","id":"q121"},{"ch":3,"type":"mcq","q":"逆变失败（逆变颠覆）的常见原因不包括____。","opts":["负载电阻过大","触发电路工作不可靠，造成脉冲丢失、脉冲延迟","晶闸管发生故障，失去正常通断能力","交流电源发生异常，如断电、缺相或电压过低"],"ans":0,"expl":"逆变失败原因：触发不可靠（脉冲丢失/延迟）、晶闸管故障、交流电源异常、换相裕量角不足等。","id":"q122"},{"ch":3,"type":"mcq","q":"最小逆变角βmin=δ+γ+θ′，其中δ是晶闸管关断时间tq折合的电角度（约4°~5°），γ是换相重叠角，θ′是安全裕量角（约取10°）。βmin一般取____。","opts":["10°~15°","5°~10°","30°~35°","45°~60°"],"ans":2,"expl":"βmin=δ+γ+θ′，一般取30°~35°，逆变角不能太小，防止逆变失败。","id":"q123"},{"ch":3,"type":"mcq","q":"晶闸管相控电路（触发电路）中，应用最多的是____触发电路。","opts":["同步信号为锯齿波的","同步信号为正弦波的","集成触发","数字触发"],"ans":0,"expl":"大、中功率变流器广泛应用晶体管触发电路，其中以同步信号为锯齿波的触发电路应用最多。","id":"q124"},{"ch":3,"type":"mcq","q":"同步信号为锯齿波的触发电路有三个基本环节，分别是____。","opts":["脉冲形成、脉冲输出、强触发","锯齿波形成、同步、保护","脉冲放大、脉冲移相、过流保护","脉冲的形成与放大、锯齿波的形成和脉冲移相、同步环节"],"ans":3,"expl":"三个基本环节：脉冲形成与放大、锯齿波形成和脉冲移相、同步环节；此外还有强触发和双窄脉冲形成环节。","id":"q125"},{"ch":3,"type":"mcq","q":"作业真题：单相桥式全控整流电路带电阻负载，若晶闸管VT2不能导通，则____。","opts":["输出电压不变","负半周无输出，输出电压波形只剩正半周，输出直流平均值降为原来的一半","电路发生短路","VT4过流损坏"],"ans":1,"expl":"VT2不能导通时，与其组成一对桥臂的VT3也无法形成导电回路，负半周ud=0，电路退化为单相半波整流，输出平均值降为原来的一半。","id":"q126"},{"ch":3,"type":"mcq","q":"作业真题：单相桥式全控整流电路带电阻负载，若晶闸管VT2被击穿而短路，则____。","opts":["正半周正常，仅负半周无输出","正半周VT1、VT4导通时，u2经VT2（短路）与VT4形成短路回路，VT4将因过流而损坏","所有晶闸管均不受影响","输出电压升高为原来的两倍"],"ans":1,"expl":"VT2短路时，正半周VT4一旦导通，u2经短路的VT2和导通的VT4构成短路回路，VT4过流损坏；负半周VT2、VT3导通时VT2已短路，VT3单独工作，电路不能正常工作。","id":"q127"},{"ch":3,"type":"mcq","q":"作业真题：三相半波可控整流电路带电阻负载、α=0°时，若B相触发脉冲消失，则____。","opts":["B相应导通区间ud波形为零，输出电压平均值降低","输出电压不变，仅波形畸变","电路短路损坏晶闸管","A、C相也不导通"],"ans":0,"expl":"B相脉冲消失→VT2不导通，在B相应导通区间（120°~240°）无其它相晶闸管可换流，ud=0，输出平均电压降低（A、C相仍正常导通）。","id":"q128"},{"ch":3,"type":"fill","q":"作业真题：单相桥式全控整流电路，大电感负载，U2=100V，α=60°，无续流二极管VDR时，Ud=____V。","ans":"45","accept":["45V","45.0","45.0V"],"expl":"无VDR时Ud=0.9U2cosα=0.9×100×cos60°=45V；Id=Ud/Rd=45/2=22.5A。","id":"q129"},{"ch":3,"type":"fill","q":"作业真题：单相桥式全控整流电路，大电感负载，U2=100V，α=60°，有续流二极管VDR时，Ud=____V。","ans":"67.5","accept":["67.5V","67.50","67.5V"],"expl":"有VDR时Ud=0.9U2(1+cosα)/2=0.9×100×(1+0.5)/2=67.5V；Id=Ud/Rd=67.5/2=33.75A。","id":"q130"},{"ch":3,"type":"fill","q":"三相桥式全控整流电路带阻感负载（电流连续）、U2=100V、α=0°时，Ud=____V。","ans":"234","accept":["234V","234.0","234V"],"expl":"Ud=2.34U2cosα=2.34×100×1=234V。","id":"q131"},{"ch":3,"type":"fill","q":"三相半波可控整流电路带阻感负载（电流连续）、U2=100V、α=0°时，Ud=____V。","ans":"117","accept":["117V","117.0","117V"],"expl":"Ud=1.17U2cosα=1.17×100×1=117V。","id":"q132"},{"ch":4,"type":"mcq","q":"逆变的概念是____。","opts":["把交流电变成直流电","把交流电压升高","把直流电变成交流电，与整流相对应","把直流电压降低"],"ans":2,"expl":"逆变：直流电变成交流电，与整流相对应；交流侧接电网为有源逆变，接负载为无源逆变。","id":"q133"},{"ch":4,"type":"mcq","q":"交流侧接电网的逆变称为____，交流侧接负载的逆变称为____。","opts":["无源逆变；有源逆变","电压型逆变；电流型逆变","单相逆变；三相逆变","有源逆变；无源逆变"],"ans":3,"expl":"交流侧接电网为有源逆变；交流侧直接接负载为无源逆变。","id":"q134"},{"ch":4,"type":"mcq","q":"交直交变频由交直变换（整流）和直交变换两部分组成，其中____就是逆变。","opts":["前一部分（交直变换）","整流部分","交流调压部分","后一部分（直交变换）"],"ans":3,"expl":"交直交变频=整流+逆变，后一部分直交变换即逆变。","id":"q135"},{"ch":4,"type":"mcq","q":"交流电机调速用变频器、不间断电源、感应加热电源等电力电子装置的核心部分都是____。","opts":["逆变电路","整流电路","斩波电路","交流调压电路"],"ans":0,"expl":"逆变电路是变频器、UPS、感应加热电源等装置的核心。","id":"q136"},{"ch":4,"type":"mcq","q":"逆变电路按直流侧电源性质分为电压型逆变电路（VSTI）和电流型逆变电路（CSTI），其中电流型逆变电路直流侧是____。","opts":["电压源","电阻","电流源","电容"],"ans":2,"expl":"电压型直流侧是电压源（VSTI），电流型直流侧是电流源（CSTI）。","id":"q137"},{"ch":4,"type":"mcq","q":"电压型逆变电路的特点是____。","opts":["直流侧为电流源，输出电流为矩形波","直流侧为电压源或并联大电容，直流侧电压基本无脉动；输出电压为矩形波，输出电流因负载阻抗不同而不同","输出电压为正弦波","直流侧电压脉动很大"],"ans":1,"expl":"电压型逆变电路三条特点：直流侧电压基本无脉动；输出电压矩形波、输出电流随负载而定；阻感负载需提供无功功率。","id":"q138"},{"ch":4,"type":"mcq","q":"电压型逆变电路带阻感负载时，为了给交流侧向直流侧反馈的无功能量提供通道，逆变桥各臂并联____二极管。","opts":["普通整流","反馈（续流）","稳压","隔离"],"ans":1,"expl":"反馈二极管（又称续流二极管）为无功反馈提供通道，同时使负载电流连续。","id":"q139"},{"ch":4,"type":"mcq","q":"单相半桥电压型逆变电路中，V1和V2栅极信号互补，输出电压uo为矩形波，幅值Um=____。","opts":["Ud","2Ud","Ud/2","√2Ud"],"ans":2,"expl":"半桥电路输出幅值Um=Ud/2；缺点：输出幅值只有Ud/2，且直流侧需两电容器串联并控制均压；用于几kW以下小功率。","id":"q140"},{"ch":4,"type":"mcq","q":"单相半桥逆变电路的优点是电路简单、使用器件少，其缺点是____。","opts":["输出波形畸变大","只能用于大功率","无法实现移相调压","输出交流电压幅值为Ud/2，且直流侧需两电容器串联、要控制两者电压均衡"],"ans":3,"expl":"半桥缺点：输出幅值Ud/2、两电容串联需均压；用于几kW以下小功率逆变电源。","id":"q141"},{"ch":4,"type":"mcq","q":"单相全桥逆变电路共四个桥臂，可看成两个半桥电路组合而成，两对桥臂交替导通180°，输出电压波形与半桥相同但幅值____。","opts":["高出一倍","低一半","相同","高出两倍"],"ans":0,"expl":"全桥输出幅值Um=Ud，比半桥高出一倍；改变输出交流电压有效值只能通过改变直流电压Ud实现。","id":"q142"},{"ch":4,"type":"mcq","q":"单相全桥逆变电路带阻感负载时，可采用移相方式来调节输出电压。V3的基极信号比V1落后θ（0<θ<π），改变____就可调节输出电压。","opts":["Ud","负载阻抗","θ","开关频率"],"ans":2,"expl":"移相调压：V3比V1落后θ，V3V4分别比V2V1前移(π-θ)，输出电压是正负各为θ的脉冲，改变θ调节输出电压。","id":"q143"},{"ch":4,"type":"mcq","q":"单相全桥、三相桥式逆变电路都可以看成若干个____的组合。","opts":["全桥逆变电路","电流型逆变电路","整流电路","半桥逆变电路"],"ans":3,"expl":"单相全桥、三相桥式都可看作若干半桥逆变电路的组合。","id":"q144"},{"ch":4,"type":"fill","q":"电压型逆变电路直流侧为电压源或并联____，直流侧电压基本无脉动。","ans":"大电容","accept":["电容","大电容器"],"expl":"电压型逆变电路直流侧并联大电容，使直流侧电压基本无脉动。","id":"q145"},{"ch":4,"type":"fill","q":"阻感负载时，为给交流侧向直流侧反馈的无功能量提供通道，逆变桥各臂并联____二极管（又称续流二极管）。","ans":"反馈","accept":["反馈二极管","续流","续流二极管"],"expl":"反馈二极管使无功反馈有通道，并起使负载电流连续的作用。","id":"q146"},{"ch":5,"type":"mcq","q":"直流斩波电路是将直流电变为____的直流电，一般指直接将直流电变为另一直流电，不包括直流—交流—直流。","opts":["另一固定电压或可调电压","交流电","任意频率的交流电","恒流源"],"ans":0,"expl":"直流斩波电路（DC/DC变换器）将直流电变为另一固定电压或可调电压的直流电。","id":"q147"},{"ch":5,"type":"fill","q":"6种基本斩波电路为：Buck、Boost、Buck-Boost、Cuk、____和Zeta。","ans":"Sepic","expl":"6种基本斩波电路：Buck、Boost、Buck-Boost、Cuk、Sepic和Zeta。","id":"q148"},{"ch":5,"type":"fill","q":"6种基本斩波电路为：Buck、Boost、Buck-Boost、Cuk、Sepic和____。","ans":"Zeta","expl":"6种基本斩波电路：Buck、Boost、Buck-Boost、Cuk、Sepic和Zeta。","id":"q149"},{"ch":5,"type":"mcq","q":"复合斩波电路是____的组合，多相多重斩波电路是____的组合。","opts":["相同结构基本斩波电路；不同结构基本斩波电路","不同结构基本斩波电路；相同结构基本斩波电路","不同拓扑逆变电路；相同拓扑逆变电路","整流电路与斩波电路；斩波电路与逆变电路"],"ans":1,"expl":"复合斩波=不同结构基本斩波电路组合；多相多重斩波=相同结构基本斩波电路组合。","id":"q150"},{"ch":5,"type":"fill","q":"降压斩波电路电流连续时，负载电压平均值Uo=____Us（α为导通占空比）。","ans":"α","accept":["a","占空比","αUs"],"expl":"斩波输出直流平均电压Uo=αUs；忽略损耗时可看作直流变压器：UoIo=UsI1。","id":"q151"},{"ch":5,"type":"mcq","q":"斩波电路的三种控制方式中，____（T不变、变ton）应用最多。","opts":["频率调制（ton不变、变T）","混合型（ton和T都可调）","脉冲宽度调制（PWM）","相位控制"],"ans":2,"expl":"三种控制方式：T不变变ton—PWM（应用最多）；ton不变变T—频率调制；ton和T都可调—混合型。","id":"q152"},{"ch":5,"type":"mcq","q":"降压斩波电路中，电流断续时输出电压Uo____，一般不希望出现。","opts":["被抬高","降低","不变","变为零"],"ans":0,"expl":"电流断续时Uo被抬高；通常串接较大电感L使负载电流连续且脉动小。","id":"q153"},{"ch":5,"type":"mcq","q":"降压斩波电路（Buck）中，全控型器件多为____，其典型用途之一是拖动直流电动机。","opts":["晶闸管","电力二极管","GTO","IGBT"],"ans":3,"expl":"Buck电路用全控型器件（多为IGBT），典型用途之一是拖动直流电动机，也可带蓄电池负载。","id":"q154"},{"ch":5,"type":"fill","q":"降压斩波电路中，V关断时由____续流，使负载电流连续。","ans":"续流二极管","accept":["二极管VD","VD","续流管"],"expl":"t=t1时V关断，二极管VD续流，负载电压近似为零，电流按指数下降。","id":"q155"},{"ch":5,"type":"mcq","q":"升压斩波电路中，输出电压升高的原因是____使电压泵升，____将输出电压保持住。","opts":["电容C储能；电感L","电感L储能；电容C","变压器；二极管","电源E；电阻R"],"ans":1,"expl":"升压斩波：电感L储能使电压泵升，电容C将输出电压保持住。","id":"q156"},{"ch":5,"type":"mcq","q":"升压斩波电路稳态时，输出电压Uo与电源电压E、占空比α的关系为____。","opts":["Uo=E/(1-α)","Uo=αE","Uo=αE/(1-α)","Uo=(1-α)E"],"ans":0,"expl":"Uo=E·T/toff=E/(1-α)；T/toff>1，故输出电压高于电源电压。","id":"q157"},{"ch":5,"type":"mcq","q":"升压斩波电路中，升压比T/toff的倒数记作β（β=toff/T），β与占空比α的关系为____。","opts":["α-β=1","αβ=1","α=β","α+β=1"],"ans":3,"expl":"β=toff/T=(T-ton)/T=1-α，故α+β=1。","id":"q158"},{"ch":5,"type":"mcq","q":"升压斩波电路的典型应用不包括____。","opts":["直流电动机传动（再生制动时把电能回馈给直流电源）","单相功率因数校正电路","照明调光","其他交直流电源"],"ans":2,"expl":"升压斩波典型应用：直流电动机传动（再生制动回馈电能）、单相功率因数校正、其他交直流电源。","id":"q159"},{"ch":5,"type":"mcq","q":"升降压斩波电路（Buck-Boost）的负载电压极性____，因此该电路也称为反极性斩波电路。","opts":["与电源电压极性相同","与电源电压极性相反","不定","恒为零"],"ans":1,"expl":"V断时L向负载释放能量，负载电压上负下正，与电源极性相反，故称反极性斩波电路。","id":"q160"},{"ch":5,"type":"mcq","q":"升降压斩波电路中，当占空比α满足____时为升压，满足____时为降压。","opts":["0<α<1/2升压；1/2<α<1降压","α<1/3升压；α>2/3降压","α>1/2升压；α<1/2降压","1/2<α<1升压；0<α<1/2降压"],"ans":3,"expl":"Uo=αE/(1-α)：0<α<1/2时降压，1/2<α<1时升压。","id":"q161"},{"ch":5,"type":"fill","q":"升降压斩波电路稳态时，输出电压Uo=____E（α为占空比）。","ans":"α/(1-α)","accept":["αE/(1-α)","α/（1-α）"],"expl":"稳态时一个周期内电感两端电压积分为零：V通时uL=E，V断时uL=-Uo，得Uo=αE/(1-α)。","id":"q162"},{"ch":5,"type":"mcq","q":"电流可逆斩波电路是____的组合，电动机电枢电流可正可负但电压只能是一种极性，因此可工作于____象限。","opts":["降压斩波电路与升压斩波电路；第1和第2","两个降压斩波电路；第1和第3","两个升压斩波电路；第2和第4","桥式可逆斩波电路；全部四"],"ans":0,"expl":"电流可逆斩波=降压斩波（V1VD1，电动，第1象限）+升压斩波（V2VD2，再生制动，第2象限）；电压只能一种极性，工作于第1、2象限。","id":"q163"},{"ch":5,"type":"mcq","q":"电流可逆斩波电路中必须防止____，以免导致电源短路。","opts":["VD1和VD2同时导通","V1和VD2同时导通","V1和V2同时导通","V2和VD1同时导通"],"ans":2,"expl":"必须防止V1和V2同时导通而导致的电源短路。","id":"q164"},{"ch":5,"type":"mcq","q":"桥式可逆斩波电路由两个电流可逆斩波电路组合而成。使V4保持通时，可向电动机提供正电压，工作于第1、2象限；使____保持通时提供负电压，工作于第3、4象限。","opts":["V1","V2","V3","VD4"],"ans":1,"expl":"V4保持通→正电压（第1、2象限）；V2保持通→负电压（第3、4象限），实现四象限运行。","id":"q165"},{"ch":5,"type":"mcq","q":"采用带隔离的直流-直流变流电路（直—交—直电路）的原因不包括____。","opts":["提高电路的功率因数","输出端与输入端需要隔离","某些应用需要相互隔离的多路输出","输出电压与输入电压的比例远小于1或远大于1"],"ans":0,"expl":"原因：隔离、多路隔离输出、变压比远小于/大于1、高频工作可减小变压器和滤波元件体积重量。","id":"q166"},{"ch":5,"type":"mcq","q":"间接直流变流电路中，单端电路（变压器流过直流脉动电流）包括____。","opts":["半桥电路和全桥电路","推挽电路和全桥电路","正激电路和反激电路","正激电路和半桥电路"],"ans":2,"expl":"单端：正激、反激（直流脉动电流）；双端：半桥、全桥、推挽（正负对称交流电流）。","id":"q167"},{"ch":5,"type":"mcq","q":"正激电路中，为防止变压器的激磁电感饱和，必须设法使激磁电流在开关关断后到下次再开通前的时间内降回零，这一过程称为____。","opts":["变压器的饱和","变压器的磁心复位","励磁涌流","换相"],"ans":1,"expl":"磁心复位：使激磁电流在S关断后降回零，防止激磁电感饱和。","id":"q168"},{"ch":5,"type":"mcq","q":"反激电路中变压器起着____作用，可看作一对相互耦合的电感；该电路不应工作于____状态。","opts":["隔离元件；满载","变压；短路","滤波；轻载","储能元件；负载开路"],"ans":3,"expl":"反激电路变压器作储能元件；输出电压随负载减小而升高，负载开路时电压趋于无穷，故不应工作于负载开路状态。","id":"q169"},{"ch":5,"type":"mcq","q":"半桥电路中S1与S2交替导通，变压器一次侧形成幅值为____的交流电压，开关S1、S2断态时承受的峰值电压均为____。","opts":["Ui；2Ui","2Ui；Ui","Ui/2；Ui","Ui/2；Ui/2"],"ans":2,"expl":"半桥一次侧幅值Ui/2，开关承受峰值电压Ui；全桥一次侧幅值Ui；推挽开关承受2Ui。","id":"q170"},{"ch":5,"type":"mcq","q":"全桥电路中互为对角的两个开关同时导通，变压器一次侧形成幅值为____的交流电压；为防止磁路饱和，应避免一次侧出现直流分量（可在一次侧回路串联____阻断直流电流）。","opts":["Ui/2；电感","Ui；电容","2Ui；电容","Ui；电阻"],"ans":1,"expl":"全桥一次侧幅值Ui；S1S4与S2S3导通时间不对称会产生直流分量造成磁路饱和，可串联电容阻断直流电流。","id":"q171"},{"ch":5,"type":"mcq","q":"推挽电路中两个开关交替导通，S1、S2断态时承受的峰值电压均为____，该电路的缺点是____。","opts":["2Ui；有偏磁问题","Ui；有直通问题","2Ui；无缺点","Ui/2；偏磁问题"],"ans":0,"expl":"推挽开关承受2Ui；缺点是有偏磁问题；半桥、全桥的缺点是直通问题。","id":"q172"},{"ch":5,"type":"mcq","q":"隔离型直流-直流变流电路带隔离输出时，全波整流电路的特点是____，适用于输出电压较低的场合（<100V）。","opts":["需要4个二极管、两个管压降","二极管承受反压仅为交流电压幅值","变压器绕组结构最简单","电感电流回路中只有一个二极管压降、只需2个二极管，但二极管断态承受的反压较高"],"ans":3,"expl":"全波整流：回路只有一个二极管压降、元件少，但反压高、二次侧需中心抽头，适用于<100V低输出电压。","id":"q173"},{"ch":5,"type":"mcq","q":"全桥整流电路（隔离型DC-DC输出侧）的特点是____，适用于高压输出场合。","opts":["电流回路只有一个二极管压降","二极管断态承受电压仅为交流电压幅值、变压器绕组简单，但电流回路有两个二极管压降、元件多","变压器需中心抽头","只适用于低压输出"],"ans":1,"expl":"全桥整流：二极管承受反压低（交流幅值）、绕组简单，但两个二极管压降、需4个二极管，用于高压输出。","id":"q174"},{"ch":5,"type":"mcq","q":"当电路输出电压非常低时，可采用同步整流电路，利用____具有非常小的导通电阻的特性降低整流电路的导通损耗。","opts":["晶闸管","快恢复二极管","低电压MOSFET","肖特基二极管"],"ans":2,"expl":"同步整流利用低电压MOSFET导通电阻很小的特性，降低整流导通损耗，进一步提高效率。","id":"q175"},{"ch":7,"type":"mcq","q":"PWM（脉宽调制）控制是指____。","opts":["通过改变脉冲的幅值来调节电压","通过改变电源频率来调节电压","通过移相来调节电压","通过对一系列脉冲的宽度进行调制，来等效地获得所需要的波形（含形状和幅值）"],"ans":3,"expl":"PWM即脉宽调制：通过对一系列脉冲宽度进行调制，等效获得所需波形。","id":"q176"},{"ch":7,"type":"mcq","q":"PWM控制的思想源于____技术，全控型器件的发展使得实现PWM控制变得十分容易。","opts":["通信","电力传输","整流","电机控制"],"ans":0,"expl":"PWM控制思想源于通信技术；全控型器件（IGBT、电力MOSFET）的完善给PWM提供了物质基础。","id":"q177"},{"ch":7,"type":"mcq","q":"PWM控制的重要理论基础——面积等效原理是指____。","opts":["面积相等的脉冲效果一定相同","冲量相等而形状不同的窄脉冲加在具有惯性的环节上时，其效果基本相同","等幅脉冲效果相同","脉宽相等的脉冲效果相同"],"ans":1,"expl":"面积等效原理：冲量（窄脉冲面积）相等而形状不同的窄脉冲加在惯性环节上，效果基本相同。","id":"q178"},{"ch":7,"type":"mcq","q":"用一系列等幅不等宽的脉冲来代替一个正弦半波，得到的波形称为____；若要改变等效输出正弦波幅值，按同一比例改变各脉冲宽度即可。","opts":["方波","三角波","锯齿波","SPWM波"],"ans":3,"expl":"按面积等效原理用等幅不等宽脉冲代替正弦半波，即SPWM波；改变幅值按同一比例改变脉冲宽度。","id":"q179"},{"ch":7,"type":"mcq","q":"等幅PWM波适用于输入电源为恒定直流的场合，下列属于等幅PWM波应用的是____。","opts":["斩控式交流调压电路","矩阵式变频电路","直流斩波电路、PWM逆变电路、PWM整流电路","相控整流电路"],"ans":2,"expl":"等幅PWM波（输入为恒定直流）：直流斩波、PWM逆变、PWM整流；不等幅PWM波（输入为交流或非恒定直流）：斩控式交流调压、矩阵式变频。","id":"q180"},{"ch":7,"type":"mcq","q":"目前中小功率的逆变电路几乎都采用PWM技术，实用的PWM逆变电路几乎都是____型电路。","opts":["电压","电流","阻抗","谐振"],"ans":0,"expl":"PWM逆变电路分电压型和电流型，目前实用的几乎都是电压型电路。","id":"q181"},{"ch":7,"type":"mcq","q":"单极性PWM控制方式（单相桥逆变）中，正半周V1保持通、V2保持断。当ur>uc时，uo=____；当ur<uc时，uo=____。","opts":["Ud；0","0；Ud","Ud；-Ud","-Ud；0"],"ans":0,"expl":"单极性：ur>uc时V4通V3断，uo=Ud；ur<uc时V4断V3通，uo=0，输出只有Ud和0两种电平。","id":"q182"},{"ch":7,"type":"mcq","q":"双极性PWM控制方式中，在调制信号ur的半个周期内三角波载波有正有负，所得PWM波也有正有负，幅值只有____两种电平。","opts":["Ud和0","±Ud","±2Ud","0和- Ud"],"ans":1,"expl":"双极性：ur>uc时V1V4导通uo=Ud；ur<uc时V2V3导通uo=-Ud，幅值只有±Ud两种电平。","id":"q183"},{"ch":7,"type":"mcq","q":"双极性PWM控制方式中，当ur>uc时，若io>0则____导通，若io<0则____导通，uo=Ud。","opts":["V2和V3；VD2和VD3","V1和V4；VD2和VD3","V1和V4；VD1和VD4","V2和V3；VD1和VD4"],"ans":2,"expl":"ur>uc时V1V4导通、V2V3关断：io>0时V1V4通，io<0时VD1VD4通（续流），uo=Ud。","id":"q184"},{"ch":7,"type":"mcq","q":"单相桥式电路既可采取单极性调制，也可采用双极性调制，两者的____不同，输出波形也有较大差别。","opts":["调制信号幅值","载波频率","直流电压","对开关器件通断控制的规律"],"ans":3,"expl":"单极性正半周1通2断、34互补，双极性各开关控制规律相同，因此输出波形差别较大。","id":"q185"},{"ch":7,"type":"mcq","q":"PWM控制技术在____中的应用最具代表性，正是其成功应用奠定了PWM技术在电力电子技术中的突出地位。","opts":["逆变电路","整流电路","斩波电路","交流调压电路"],"ans":0,"expl":"PWM技术在逆变电路中的应用最具代表性；除功率很大的逆变装置外，不用PWM控制的逆变电路已十分少见。","id":"q186"},{"ch":7,"type":"mcq","q":"PWM控制技术用于整流电路即构成PWM整流电路，可看成____。","opts":["整流电路中的相控技术向逆变电路的延伸","斩波电路的变型","逆变电路中的PWM技术向整流电路的延伸","交流调压电路的应用"],"ans":2,"expl":"PWM整流电路可看成逆变电路中的PWM技术向整流电路的延伸，是对整流电路认识的补充。","id":"q187"},{"ch":7,"type":"mcq","q":"以相控整流电路和交流调压电路为代表的相位控制技术（相控）与以PWM控制技术为代表的斩波控制技术（斩控）相比，____正在越来越占据主导地位。","opts":["相位控制技术","两者并列","无法比较","斩波控制技术"],"ans":3,"expl":"相位控制技术至今仍占据重要地位，但以PWM为代表的斩波控制技术正在越来越占据主导地位。","id":"q188"},{"ch":7,"type":"mcq","q":"直流斩波电路实际上就是直流PWM电路，应用于直流电动机调速系统就构成广泛应用的____。","opts":["交流变频调速系统","直流脉宽调速系统","串级调速系统","直流变压系统"],"ans":1,"expl":"斩波电路是PWM控制技术应用较早也成熟较早的一类电路，用于直流电动机调速构成直流脉宽调速系统。","id":"q189"},{"ch":7,"type":"fill","q":"PWM控制技术用于整流电路即构成____整流电路。","ans":"PWM","accept":["脉宽调制","PWM整流"],"expl":"PWM控制技术用于整流电路即构成PWM整流电路。","id":"q190"},{"ch":9,"type":"mcq","q":"驱动电路的基本任务是按控制目标的要求施加开通或关断的信号。对____型器件只需提供开通控制信号，对____型器件则既要提供开通信号又要提供关断信号。","opts":["半控；全控","全控；半控","不可控；半控","电压驱动；电流驱动"],"ans":0,"expl":"半控型器件只需开通控制信号；全控型器件既要开通又要关断控制信号。","id":"q191"},{"ch":9,"type":"mcq","q":"驱动电路是____之间的桥梁，其电气隔离环节一般采用光隔离或磁隔离。","opts":["电源与负载","控制电路与保护电路","主电路与控制电路","主电路与保护电路"],"ans":2,"expl":"驱动电路是主电路与控制电路之间的桥梁；光隔离用光耦合器，磁隔离用脉冲变压器（宽脉冲时采用高频调制解调防铁芯饱和）。","id":"q192"},{"ch":9,"type":"mcq","q":"晶闸管触发电路应满足的要求不包括____。","opts":["脉冲的宽度应保证晶闸管可靠导通（感性负载和反电动势负载需要宽脉冲或脉冲列触发）","触发脉冲电压越高越好，无上限","触发脉冲应有足够的幅度（户外寒冷场合为最大触发电流的3~5倍）","不超过门极电压、电流和功率定额，且在可靠触发区域之内"],"ans":1,"expl":"触发脉冲要求：宽度保证可靠导通；幅度足够（3~5倍IGT、前沿1~2A/μs）；不超门极定额且在可靠触发区域；抗干扰、温度稳定、与主电路电气隔离。","id":"q193"},{"ch":9,"type":"fill","q":"理想的晶闸管触发脉冲电流波形中，强脉冲幅值为(3~5)IGT，脉冲平顶幅值为____IGT。","ans":"1.5~2","accept":["1.5-2","1.5～2","1.5~2倍"],"expl":"强脉冲幅值3~5 IGT，平顶幅值1.5~2 IGT，前沿上升时间<1μs。","id":"q194"},{"ch":9,"type":"mcq","q":"电力MOSFET和IGBT是电压驱动型器件，为快速建立驱动电压，要求驱动电路____；在栅极串入一只低值电阻可减小寄生振荡。","opts":["输出电阻大","输出电容大","输入阻抗低","输出电阻小"],"ans":3,"expl":"电压驱动型器件要求驱动电路输出电阻小以快速建立驱动电压；关断时施加负驱动电压减小关断时间和损耗。","id":"q195"},{"ch":9,"type":"fill","q":"使电力MOSFET开通的驱动电压一般10~15V；使IGBT开通的驱动电压一般____V。","ans":"15~20","accept":["15-20","15～20","15~20V"],"expl":"MOSFET开通10~15V，IGBT开通15~20V；关断时施加-5~-15V负压有利。","id":"q196"},{"ch":9,"type":"mcq","q":"IGBT常用的专用混合集成驱动器有三菱公司的M579系列（如M57962L）和富士公司的____系列（如EXB840、EXB841）等。","opts":["M579","TLP","EXB","IR21"],"ans":2,"expl":"常用三菱M579系列（M57962L、M57959L）和富士EXB系列（EXB840、EXB841、EXB850、EXB851）。","id":"q197"},{"ch":9,"type":"mcq","q":"电力电子装置可能的过电压中，外因过电压包括____，内因过电压包括____。","opts":["换相过电压和关断过电压；操作过电压和雷击过电压","操作过电压和雷击过电压；换相过电压和关断过电压","雷击过电压和换相过电压；操作过电压和关断过电压","操作过电压和关断过电压；换相过电压和雷击过电压"],"ans":1,"expl":"外因过电压来自雷击和系统操作（操作过电压、雷击过电压）；内因过电压来自装置内部开关过程（换相过电压、关断过电压）。","id":"q198"},{"ch":9,"type":"mcq","q":"全控型器件关断时，正向电流迅速降低而由线路电感在器件两端感应出的过电压称为____。","opts":["关断过电压","换相过电压","雷击过电压","操作过电压"],"ans":0,"expl":"关断过电压：全控型器件关断时正向电流迅速降低、线路电感感应出的过电压；换相过电压发生在换相结束后反向电流急剧减小时。","id":"q199"},{"ch":9,"type":"mcq","q":"过电压抑制措施中，RC3和RCD为抑制____的措施，属于缓冲电路范畴。","opts":["外因过电压","雷击过电压","操作过电压","内因过电压"],"ans":3,"expl":"RC3（换相过电压抑制RC）、RCD（关断过电压抑制）抑制内因过电压，属于缓冲电路范畴。","id":"q200"},{"ch":9,"type":"mcq","q":"过电流保护中，____作为第一保护措施，快熔仅作为短路时部分区段的保护，直流快速断路器整定在电子电路动作之后，过电流继电器整定在过载时动作。","opts":["交流断路器","快速熔断器","避雷器","电子保护电路"],"ans":3,"expl":"电子电路为第一保护；快熔保护短路部分区段；直流快速断路器在电子电路动作后动作；过电流继电器在过载时动作。","id":"q201"},{"ch":9,"type":"mcq","q":"对重要的且易发生短路的晶闸管设备或全控型器件，需采用电子电路进行过电流保护。常在全控型器件的____中设置过电流保护环节，响应最快。","opts":["驱动电路","触发电路","主电路","检测电路"],"ans":0,"expl":"全控型器件驱动电路中设置过电流保护环节响应最快，硬件保护和软件保护相结合。","id":"q202"},{"ch":9,"type":"mcq","q":"快熔对器件的保护方式有全保护和短路保护两种。全保护（过载、短路均由快熔保护）适用于____。","opts":["大功率装置","任何场合","小功率装置或器件裕度较大的场合","高压场合"],"ans":2,"expl":"全保护适用于小功率装置或器件裕度较大的场合；短路保护时快熔只在短路电流较大的区域起作用。","id":"q203"},{"ch":9,"type":"mcq","q":"缓冲电路（吸收电路）中，关断缓冲电路又称____，开通缓冲电路又称____。","opts":["di/dt抑制电路；du/dt抑制电路","du/dt抑制电路；di/dt抑制电路","过压吸收电路；过流吸收电路","馈能式电路；耗能式电路"],"ans":1,"expl":"关断缓冲（du/dt抑制）吸收关断/换相过电压、抑制du/dt、减小关断损耗；开通缓冲（di/dt抑制）抑制开通电流过冲和di/dt、减小开通损耗。","id":"q204"},{"ch":9,"type":"mcq","q":"缓冲电路按能量的去向可分为____缓冲电路和____缓冲电路（无损吸收电路）。","opts":["充电式；放电式","耗能式；馈能式","电阻式；电容式","串联式；并联式"],"ans":1,"expl":"按能量去向分类：耗能式缓冲电路和馈能式缓冲电路（无损吸收电路）。","id":"q205"},{"ch":9,"type":"mcq","q":"缓冲电路选型中，RC缓冲电路主要用于____容量器件，充放电型RCD缓冲电路用于____容量场合，放电阻止型RCD缓冲电路用于中或大容量器件。","opts":["大；小","中等；小","小；中等","小；大"],"ans":2,"expl":"RC缓冲电路主要用于小容量器件，充放电型RCD用于中等容量，放电阻止型RCD用于中或大容量。","id":"q206"},{"ch":9,"type":"mcq","q":"晶闸管串联使用时，静态不均压的原因是____。","opts":["串联器件流过的漏电流相同，但因静态伏安特性的分散性，各器件分压不等","各器件漏电流不同","各器件额定电压不同","触发脉冲不同步"],"ans":0,"expl":"静态不均压：串联器件漏电流相同，但静态伏安特性分散→分压不等；动态不均压由动态参数特性差异造成。","id":"q207"},{"ch":9,"type":"mcq","q":"晶闸管串联时的静态均压措施是采用____，其阻值应比器件阻断时的正、反向电阻小得多；动态均压采用____。","opts":["电容均压；电阻串联","电感均压；RC串联支路","二极管均压；电容并联","电阻均压（Rp）；RC并联支路"],"ans":3,"expl":"静态均压：选用参数一致器件+电阻均压Rp；动态均压：RC并联支路，采用门极强脉冲触发可显著减小开通时间差异。","id":"q208"},{"ch":9,"type":"mcq","q":"晶闸管并联的均流措施不包括____。","opts":["挑选特性参数尽量一致的器件","增大门极触发电流幅值","采用均流电抗器","用门极强脉冲触发"],"ans":1,"expl":"均流措施：挑选参数一致器件、均流电抗器、门极强脉冲触发；当需要同时串联和并联晶闸管时，通常采用先串后并的方法联接。","id":"q209"},{"ch":9,"type":"mcq","q":"电力MOSFET并联运行具有电流自动均衡能力、容易并联，原因是____。","opts":["Ron具有负温度系数","输入阻抗高","Ron具有正温度系数","开关速度快"],"ans":2,"expl":"MOSFET的Ron为正温度系数，温度升高电阻增大、电流自动减小，具有自动均衡能力；还可在源极电路串入小电感起均流作用。","id":"q210"},{"ch":9,"type":"mcq","q":"关于IGBT并联运行的特点，下列说法正确的是____。","opts":["在1/2或1/3额定电流以下的区段通态压降具有负温度系数，以上区段具有正温度系数，并联时具有电流自动均衡能力、易于并联","通态压降始终为负温度系数，不易并联","始终为正温度系数，无需均流","IGBT不能并联使用"],"ans":0,"expl":"IGBT在1/2~1/3额定电流以下通态压降为负温度系数，以上为正温度系数，并联时具有自动均衡能力、易于并联。","id":"q211"}]</script>
+<script>
+/* 电力电子技术 · 刷题台 逻辑 */
+'use strict';
+
+/* ============ 数据 ============ */
+var DATA = [];
+(function () {
+  var el = document.getElementById('qdata');
+  try { DATA = JSON.parse(el.textContent); } catch (e) { DATA = []; }
+})();
+
+var CH = {1: '第1章 绪论', 2: '第2章 电力电子器件', 3: '第3章 整流电路', 4: '第4章 逆变电路', 5: '第5章 直流-直流变流电路', 7: '第7章 PWM控制技术', 9: '第9章 器件应用的共性问题'};
+var CH_ORDER = [1, 2, 3, 4, 5, 7, 9];
+var LETTERS = ['A', 'B', 'C', 'D'];
+var BY_ID = {};
+DATA.forEach(function (q) { BY_ID[q.id] = q; });
+
+/* 各章电路符号图标 */
+var ICONS = {
+  1: '<path d="M13 2 3 14h7l-1 8 10-12h-7z"/>',
+  2: '<rect x="5" y="4" width="14" height="16" rx="2"/><path d="M12 4v16M5 12h14M5 7h3M5 17h3M16 7h3M16 17h3"/>',
+  3: '<path d="M12 3v18M3 12h18M5 5l14 14M19 5 5 19"/>',
+  4: '<path d="M4 7h6v10h4V7h6"/>',
+  5: '<path d="M4 8h8v8H4z"/><path d="M16 6h4M16 12h4M16 18h4"/>',
+  7: '<path d="M4 10h4v4H4zM10 5h4v14h-4zM16 8h4v8h-4z"/>',
+  9: '<path d="M12 3l7 3v6c0 4-3.2 7-7 9-3.8-2-7-5-7-9V6z"/><path d="M9 12l2 2 4-4"/>'
+};
+function chIcon(ch, copper) {
+  return '<div class="icon-chip' + (copper ? ' copper' : '') + '"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">' + (ICONS[ch] || ICONS[1]) + '</svg></div>';
+}
+
+/* 章节知识框架（依据 PPT 提取文本提炼） */
+var FRAMEWORK = [
+  {ch: 1, name: '第1章 绪论', topics: [
+    {t: '定义与两大分支', pts: ['电力电子技术=用器件对电能进行变换、控制和优化', '器件制造技术（基础·半导体物理）＋变流技术（核心·电路理论）', '与信息电子区别：器件一般工作在开关状态']},
+    {t: '四大电力变换', pts: ['交流→直流：整流', '直流→交流：逆变', '直流→直流：直流斩波', '交流→交流：调压、变频、变相']},
+    {t: '学科交叉关系', pts: ['1974 W.Newell 倒三角形：电力学＋电子学＋控制理论', '弱电控制强电、控制理论是接口纽带', '电力电子装置是自动化技术的基础支撑']},
+    {t: '发展与应用节能', pts: ['以器件发展为纲：水银整流器→晶闸管（1957）→全控型器件', '应用：工业、交通、电力系统、电子装置电源、家电', '节能技术：80%电能经处理、节能15%~40%']}
+  ]},
+  {ch: 2, name: '第2章 电力电子器件', topics: [
+    {t: '概念与分类', pts: ['主电路直接承担电能变换或控制', '半控（晶闸管）/全控（IGBT、MOSFET）/不可控（二极管）', '电流驱动型（二极管、晶闸管、GTO、GTR）/电压驱动型（MOSFET、IGBT）']},
+    {t: '电力二极管', pts: ['N-层高阻耐压 vs 通态压降矛盾；电导调制效应', '参数：IF(AV)按有效值相等选取、URRM留两倍裕量', '类型：普通/快恢复/肖特基（开关快、耐压低）']},
+    {t: '晶闸管', pts: ['四层PNPN结构、A/K/G三端', '导通条件：正向阳极电压＋门极触发；四特性（门极失控等）', '参数：额定电压2~3倍裕量、IT(AV)、du/dt、di/dt；tq约几百μs']},
+    {t: '电力MOSFET 与 IGBT', pts: ['MOSFET：单极型、开关最快（100kHz以上）、Ron正温度系数、UGS>20V击穿', 'IGBT：GTR+MOSFET复合、uGE控制、开通15~20V、反并联快恢复二极管', '器件格局：GTO兆瓦以上、IGBT主体、光控晶闸管容量最大、MOSFET低压']}
+  ]},
+  {ch: 3, name: '第3章 整流电路', topics: [
+    {t: '相控基础', pts: ['相控=控制触发脉冲相位调节输出电压', '触发角α、导通角θ、自然换相点（α=0起点）', '分类：器件/结构/相数/单双拍']},
+    {t: '单相可控整流', pts: ['半波：180°移相、铁芯直流磁化、很少应用', '全控桥：电阻Ud=0.9U2(1+cosα)/2；大电感Ud=0.9U2cosα', '全波：2管、承受2√2U2；半控＋VDR防失控']},
+    {t: '三相可控整流', pts: ['三相半波：150°/90°、含直流分量、应用少', '三相桥全控：导通1-2-3-4-5-6、双窄脉冲、6脉波、Ud=2.34U2cosα', '电容滤波（1.2U2/2.45U2）、双反星形（低压大电流、平衡电抗器）']},
+    {t: '有源逆变与触发', pts: ['逆变条件：反极性EM且>Ud、α>π/2', 'β=π-α；β>γ才可靠换相；βmin=δ+γ+θ′≈30°~35°', '锯齿波同步触发三环节：脉冲形成放大、锯齿波与移相、同步']}
+  ]},
+  {ch: 4, name: '第4章 逆变电路', topics: [
+    {t: '概念与分类', pts: ['逆变=直流变交流，是整流的逆过程', '有源（接电网）/无源（接负载）', '交直交变频=整流＋逆变；电压型VSTI/电流型CSTI']},
+    {t: '电压型逆变电路', pts: ['特点：直流侧电压无脉动、输出矩形波、需反馈无功', '反馈（续流）二极管：为无功反馈提供通道、使电流连续', '半桥Um=Ud/2、两电容需均压；全桥幅值高出一倍']},
+    {t: '输出电压调节', pts: ['改变直流电压Ud调节有效值', '移相调压：V3比V1落后θ，改变θ调节输出', '单相全桥、三相桥可看作半桥电路的组合']}
+  ]},
+  {ch: 5, name: '第5章 直流-直流变流电路', topics: [
+    {t: '斩波基础', pts: ['将直流变为另一固定/可调直流（DC/DC）', '6种基本斩波：Buck、Boost、Buck-Boost、Cuk、Sepic、Zeta', 'Uo=αUs、直流变压器；PWM（T不变变ton）应用最多', '复合=不同结构组合；多相多重=相同结构组合']},
+    {t: '三种基本斩波电路', pts: ['Buck降压：Uo=αE、VD续流、IGBT为主', 'Boost升压：电感泵升+电容保持、Uo=E/(1-α)、α+β=1', 'Buck-Boost反极性：Uo=αE/(1-α)、α>1/2升压']},
+    {t: '复合与桥式可逆', pts: ['电流可逆：降压+升压组合、工作于第1、2象限、防V1V2同时导通', '桥式可逆：两电流可逆组合、四象限运行（V4正/V2负）']},
+    {t: '隔离型直流-直流', pts: ['原因：隔离、多路输出、变压比悬殊、高频减小体积', '单端：正激（磁心复位）、反激（储能、不可空载）', '双端：半桥Ui/2、全桥Ui（防直通/直流分量）、推挽2Ui（偏磁）', '全波整流<100V；全桥整流高压；同步整流用MOSFET']}
+  ]},
+  {ch: 7, name: '第7章 PWM控制技术', topics: [
+    {t: '基本原理', pts: ['PWM=对脉冲宽度调制等效获得所需波形', '思想源于通信技术；面积等效原理（冲量相等效果相同）', 'SPWM：等幅不等宽脉冲代替正弦半波']},
+    {t: '调制方式', pts: ['单极性：正半周1通2断，ur>uc时uo=Ud、否则0', '双极性：幅值±Ud、各开关控制规律相同', '等幅PWM（恒定直流输入）vs 不等幅PWM（交流输入）']},
+    {t: '应用与地位', pts: ['斩波：直流脉宽调速系统', '逆变：最具代表性，实用几乎全是电压型', 'PWM整流=逆变PWM技术向整流延伸；斩控正在主导']}
+  ]},
+  {ch: 9, name: '第9章 器件应用的共性问题', topics: [
+    {t: '驱动电路', pts: ['任务：半控只需开通信号、全控要开通＋关断', '隔离：光隔离（光耦）/磁隔离（脉冲变压器）', '晶闸管触发：宽度、幅度（3~5 IGT）、不超门极定额、抗干扰', 'MOSFET 10~15V；IGBT 15~20V、关断-5~-15V；M579/EXB集成驱动']},
+    {t: '过电压与过电流保护', pts: ['外因（操作/雷击）vs 内因（换相/关断过电压）', 'RC3、RCD抑制内因过电压（属缓冲电路）', '电子电路第一保护、快熔短路保护、直流快速断路器、过流继电器', '全控器件驱动电路内设过流保护环节响应最快']},
+    {t: '缓冲电路', pts: ['关断缓冲（du/dt抑制）/开通缓冲（di/dt抑制）/复合', '耗能式 vs 馈能式（无损吸收）', 'RC小容量、充放电RCD中等、放电阻止型RCD中或大容量']},
+    {t: '串联与并联', pts: ['晶闸管串联：静态/动态不均压，Rp均压＋RC动态均压', '并联：选一致器件、均流电抗器、门极强脉冲触发、先串后并', 'MOSFET/IGBT并联：Ron/通态压降正温度系数→自动均流']}
+  ]}
+];
+
+/* ============ localStorage：记录 + 迁移 ============ */
+var REC_KEY = 'pet_pe_record';
+var DAY_KEY = 'pet_pe_daily';
+var OLD_KEY = 'pet_record';
+
+function safeGet(k) { try { return localStorage.getItem(k); } catch (e) { return null; } }
+function safeSet(k, v) { try { localStorage.setItem(k, v); } catch (e) {} }
+function safeDel(k) { try { localStorage.removeItem(k); } catch (e) {} }
+function parseObj(s) { try { var o = JSON.parse(s); return (o && typeof o === 'object') ? o : {}; } catch (e) { return {}; } }
+
+function loadRecord() {
+  var rec = parseObj(safeGet(REC_KEY) || '');
+  if (!Object.keys(rec).length) {
+    // 尝试迁移旧版数字键记录（模板要求：旧题 id 永不变、数字键自动迁移为 id 键并回写）
+    var old = parseObj(safeGet(OLD_KEY) || '');
+    var migrated = false;
+    Object.keys(old).forEach(function (k) {
+      if (/^\d+$/.test(k)) { rec['q' + k] = old[k]; migrated = true; }
+      else { rec[k] = old[k]; }
+    });
+    if (migrated) { safeSet(REC_KEY, JSON.stringify(rec)); safeDel(OLD_KEY); }
+  }
+  return rec;
+}
+function saveRecord(rec) { safeSet(REC_KEY, JSON.stringify(rec)); }
+
+function recTouch(rec, qid, ok) {
+  var r = rec[qid] || {c: 0, w: 0, f: 0, last: 0};
+  if (ok) r.c = (r.c || 0) + 1; else r.w = (r.w || 0) + 1;
+  r.last = Date.now();
+  r.lastOk = ok ? 1 : 0;
+  rec[qid] = r;
+  // 当日统计
+  var day = todayStr();
+  var d = parseObj(safeGet(DAY_KEY) || '');
+  var dd = d[day] || {c: 0, w: 0};
+  if (ok) dd.c++; else dd.w++;
+  d[day] = dd;
+  safeSet(DAY_KEY, JSON.stringify(d));
+}
+function todayStr() {
+  var d = new Date();
+  var m = ('0' + (d.getMonth() + 1)).slice(-2);
+  var day = ('0' + d.getDate()).slice(-2);
+  return d.getFullYear() + '-' + m + '-' + day;
+}
+function days7() {
+  var out = [];
+  for (var i = 6; i >= 0; i--) {
+    var d = new Date(); d.setDate(d.getDate() - i);
+    var m = ('0' + (d.getMonth() + 1)).slice(-2);
+    var day = ('0' + d.getDate()).slice(-2);
+    out.push(d.getFullYear() + '-' + m + '-' + day);
+  }
+  return out;
+}
+
+/* ============ 判分 ============ */
+function norm(s) {
+  s = String(s == null ? '' : s);
+  s = s.replace(/[\s\u3000]/g, '');
+  s = s.replace(/[，,、;；]/g, '');
+  s = s.replace(/[\uFF01-\uFF5E]/g, function (c) { return String.fromCharCode(c.charCodeAt(0) - 0xFEE0); });
+  s = s.toLowerCase();
+  s = s.replace(/[。．.]+$/, '');
+  return s;
+}
+function stripUnit(s) {
+  return s.replace(/(kv|mv|ka|ma|hz|ω|°|v|a)+$/, '');
+}
+function judgeFill(q, input) {
+  var n = norm(input);
+  var targets = [norm(q.ans)].concat((q.accept || []).map(norm));
+  if (targets.indexOf(n) >= 0) return true;
+  if (targets.indexOf(stripUnit(n)) >= 0) return true;
+  var base = norm(q.ans);
+  if (base.length >= 4 && (n.indexOf(base) >= 0 || base.indexOf(n) >= 0)) return true;
+  return false;
+}
+
+/* ============ 全局状态 ============ */
+var rec = loadRecord();
+var view = 'home';          // home | quiz | cards | stats
+var qmode = 'ch1';          // chN / random / wrong / fav
+var pool = [];              // 当前题目 id 数组
+var qidx = 0;               // 当前题目在 pool 中下标
+var poolMode = '';          // 当前 pool 所属模式（区分章节切换）
+var modePos = {};           // 各章节独立进度：chN -> qidx
+var judged = false;         // 当前题是否已判分
+var qAnswer = '';           // 当前判分结果 ok/bad
+var cardCh = 'all';         // 速记卡片章节
+var cardPool = [];
+var cardIdx = 0;
+var cardFlipped = false;
+var fwCh = 'all';           // 知识框架章节
+
+/* ============ 工具 ============ */
+function $(sel) { return document.querySelector(sel); }
+function el(id) { return document.getElementById(id); }
+function shuffle(arr) {
+  var a = arr.slice();
+  for (var i = a.length - 1; i > 0; i--) {
+    var j = Math.floor(Math.random() * (i + 1));
+    var t = a[i]; a[i] = a[j]; a[j] = t;
+  }
+  return a;
+}
+function fmt(n) { return n == null ? '0' : String(n); }
+function pct(c, w) {
+  var t = c + w;
+  return t ? Math.round(c * 100 / t) : 0;
+}
+function toast(msg) {
+  var t = el('toast');
+  t.textContent = msg;
+  t.classList.add('on');
+  clearTimeout(t._timer);
+  t._timer = setTimeout(function () { t.classList.remove('on'); }, 1600);
+}
+function esc(s) {
+  return String(s == null ? '' : s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
+}
+
+/* ============ 统计汇总 ============ */
+function totals() {
+  var c = 0, w = 0, favN = 0, wrongN = 0, doneN = 0;
+  Object.keys(rec).forEach(function (k) {
+    var r = rec[k];
+    if (!BY_ID[k]) return;
+    c += r.c || 0; w += r.w || 0;
+    if (r.f) favN++;
+    if (r.w > 0) wrongN++;
+    if ((r.c || 0) + (r.w || 0) > 0) doneN++;
+  });
+  return {c: c, w: w, fav: favN, wrong: wrongN, done: doneN, rate: pct(c, w)};
+}
+function chStat(ch) {
+  var qs = DATA.filter(function (q) { return q.ch === ch; });
+  var c = 0, w = 0, done = 0, fav = 0;
+  qs.forEach(function (q) {
+    var r = rec[q.id];
+    if (r) {
+      c += r.c || 0; w += r.w || 0;
+      if (r.f) fav++;
+      if ((r.c || 0) + (r.w || 0) > 0) done++;
+    }
+  });
+  return {n: qs.length, done: done, c: c, w: w, rate: pct(c, w), fav: fav};
+}
+
+/* ============ 视图路由 ============ */
+function showView(v) {
+  view = v;
+  document.querySelectorAll('.view').forEach(function (x) { x.classList.remove('on'); });
+  el('view-' + v).classList.add('on');
+  document.querySelectorAll('.tab').forEach(function (t) {
+    var dv = t.getAttribute('data-view');
+    var on = dv === v || (v === 'quiz' && (dv === 'random' || dv === 'wrong' || dv === 'fav') && dv === qmode);
+    t.classList.toggle('on', on);
+  });
+  if (v === 'home') renderHome();
+  if (v === 'quiz') renderQuiz();
+  if (v === 'cards') renderCards();
+  if (v === 'stats') renderStats();
+  if (v === 'kn') renderKn();
+  if (v === 'doc') renderDoc();
+  refreshTabbar();
+  updateTopStat();
+  window.scrollTo(0, 0);
+}
+
+/* ============ 移动端底部 TabBar + 章节弹层 ============ */
+function refreshTabbar() {
+  var m = { random: 0, wrong: 0, fav: 0, stats: 0, ch: 0 };
+  if (view === 'quiz') {
+    if (qmode === 'random') m.random = 1;
+    else if (qmode === 'wrong') m.wrong = 1;
+    else if (qmode === 'fav') m.fav = 1;
+    else if (qmode.indexOf('ch') === 0) m.ch = 1;
+  } else if (view === 'stats') {
+    m.stats = 1;
+  }
+  document.querySelectorAll('.tb-item').forEach(function (b) {
+    b.classList.toggle('on', !!m[b.getAttribute('data-tb')]);
+  });
+}
+function openChSheet() {
+  var g = el('chSheetGrid');
+  g.innerHTML = '';
+  CH_ORDER.forEach(function (ch) {
+    var s = chStat(ch);
+    var d = document.createElement('button');
+    d.className = 'ch-sheet-item';
+    d.innerHTML = '<b>' + esc(CH[ch]) + '</b><span>' + fmt(s.n) + ' 题 · 已练 ' + fmt(s.done) + '</span>';
+    d.addEventListener('click', function () { closeChSheet(); location.hash = 'ch' + ch; });
+    g.appendChild(d);
+  });
+  el('chMask').classList.add('show');
+  el('chSheet').classList.add('show');
+}
+function closeChSheet() {
+  el('chMask').classList.remove('show');
+  el('chSheet').classList.remove('show');
+}
+function isMobileLike() {
+  return /Android|iPhone|iPad|iPod|Mobile|MicroMessenger|Opera Mini/i.test(navigator.userAgent) || window.innerWidth <= 860;
+}
+
+function route() {
+  var h = (location.hash || '#home').replace(/^#/, '').replace(/^\//, '');
+  if (h.indexOf('ch') === 0 && CH_ORDER.indexOf(parseInt(h.slice(2), 10)) >= 0) {
+    qmode = h; showView('quiz');
+  } else if (h === 'random' || h === 'wrong' || h === 'fav') {
+    qmode = h; showView('quiz');
+  } else if (h === 'cards' || h === 'stats' || h === 'home' || h === 'kn' || h === 'doc') {
+    showView(h);
+  } else {
+    showView('home');
+  }
+}
+window.addEventListener('hashchange', route);
+
+/* ============ 顶部统计 ============ */
+function updateTopStat() {
+  var t = totals();
+  var elm = el('topRate');
+  if (elm) elm.textContent = fmt(t.rate) + '%';
+}
+
+/* ============ 首页 ============ */
+function renderHome() {
+  var t = totals();
+  el('heroTotal').textContent = fmt(DATA.length);
+  el('heroRate').textContent = fmt(t.rate) + '%';
+  el('heroDone').textContent = fmt(t.done);
+  var grid = el('chapGrid');
+  grid.innerHTML = '';
+  CH_ORDER.forEach(function (ch) {
+    var s = chStat(ch);
+    var div = document.createElement('div');
+    div.className = 'chap';
+    div.addEventListener('click', function () { location.hash = 'ch' + ch; });
+    div.innerHTML =
+      chIcon(ch) +
+      '<div class="chap-main"><div class="chap-top"><span class="chap-name">' + esc(CH[ch]) + '</span><span class="chap-num">' + fmt(s.n) + '题</span></div>' +
+      '<div class="chap-bar"><i style="width:' + (s.n ? Math.round(s.done * 100 / s.n) : 0) + '%"></i></div>' +
+      '<div class="chap-foot"><span>已练 ' + fmt(s.done) + '/' + fmt(s.n) + '</span><span>正确率 <b>' + fmt(s.rate) + '%</b></span></div></div>';
+    grid.appendChild(div);
+  });
+}
+
+/* ============ 刷题 ============ */
+function buildPool(mode) {
+  if (mode.indexOf('ch') === 0) {
+    var ch = parseInt(mode.slice(2), 10);
+    return DATA.filter(function (q) { return q.ch === ch; }).map(function (q) { return q.id; });
+  }
+  if (mode === 'random') return shuffle(DATA.map(function (q) { return q.id; }));
+  if (mode === 'wrong') {
+    var out = [];
+    DATA.forEach(function (q) { var r = rec[q.id]; if (r && r.w > 0) out.push(q.id); });
+    return out;
+  }
+  if (mode === 'fav') {
+    var out2 = [];
+    DATA.forEach(function (q) { var r = rec[q.id]; if (r && r.f) out2.push(q.id); });
+    return out2;
+  }
+  return [];
+}
+
+function modeLabel(m) {
+  if (m.indexOf('ch') === 0) return CH[parseInt(m.slice(2), 10)];
+  if (m === 'random') return '随机刷题';
+  if (m === 'wrong') return '错题本';
+  if (m === 'fav') return '我的收藏';
+  return '';
+}
+
+function renderQuiz() {
+  var mode = qmode;
+  if (mode === 'wrong' || mode === 'fav') {
+    // 离开章节前保存其进度；错题本/收藏每次进入重新构建
+    if (poolMode && poolMode.indexOf('ch') === 0) modePos[poolMode] = qidx;
+    pool = buildPool(mode);
+    poolMode = mode;
+    qidx = 0;
+    if (!pool.length) {
+      el('quizBody').innerHTML =
+        '<div class="card done-box"><div class="big">0</div><p>' + (mode === 'wrong' ? '暂无错题，继续保持' : '暂无收藏，刷题时点亮星标即可收藏') + '</p>' +
+        '<button class="btn btn-primary" id="btnBackHome">返回首页</button></div>';
+      el('quizTopBar').innerHTML = '<span class="quiz-mode">' + modeLabel(mode) + '</span><span class="quiz-progress">0 题</span>';
+      var bh = el('btnBackHome');
+      if (bh) bh.addEventListener('click', function () { location.hash = 'home'; });
+      return;
+    }
+    judged = false;
+    renderOne();
+    return;
+  }
+  // 同模式且未完成：继续当前进度
+  if (poolMode === mode && pool.length && qidx < pool.length) { renderOne(); return; }
+  // 切换模式：保存旧章节进度，重建目标模式的题目列表
+  if (poolMode && poolMode.indexOf('ch') === 0) modePos[poolMode] = qidx;
+  pool = buildPool(mode);
+  poolMode = mode;
+  if (mode.indexOf('ch') === 0) {
+    qidx = modePos[mode] || 0;
+    if (qidx >= pool.length) qidx = 0; // 该章已练完：重新开始
+  } else {
+    qidx = 0; // 随机每次从头开始
+  }
+  judged = false;
+  renderOne();
+}
+
+function renderOne() {
+  el('quizTopBar').innerHTML =
+    '<span class="quiz-mode">' + esc(modeLabel(qmode)) + '</span>' +
+    '<span class="quiz-progress">' + fmt(qidx + 1) + ' / ' + fmt(pool.length) + '</span>';
+  var q = BY_ID[pool[qidx]];
+  if (!q) { renderQuiz(); return; }
+  var r = rec[q.id] || {};
+  var answered = ((r.c || 0) + (r.w || 0)) > 0;
+  var ok = answered ? ((r.lastOk != null) ? !!r.lastOk : (r.w === 0)) : false;
+  var head = '<div class="q-head"><span class="q-tag">' + esc(q.id.slice(1)) + ' · ' + (q.type === 'mcq' ? '单选' : '填空') + '</span>' +
+    '<button class="q-fav' + (r.f ? ' on' : '') + '" id="btnFav" title="收藏"><svg viewBox="0 0 24 24" fill="' + (r.f ? 'currentColor' : 'none') + '" stroke="currentColor" stroke-width="2"><path d="M12 2l3.1 6.3 6.9 1-5 4.9 1.2 6.9-6.2-3.3L5.8 21.1 7 14.2l-5-4.9 6.9-1z"/></svg></button></div>';
+  var body = '<div class="q-text">' + esc(q.q) + '</div>';
+  var foot = '';
+  if (q.type === 'mcq') {
+    body += '<div class="opts" id="opts">' + q.opts.map(function (o, i) {
+      var cls = '', dis = answered ? ' disabled' : '';
+      if (answered) {
+        if (i === q.ans) cls += ' correct';
+        else if (r.pick != null && i === r.pick) cls += ' wrong';
+        else cls += ' dim';
+      }
+      return '<button class="opt' + cls + '" data-i="' + i + '"' + dis + '><span class="key">' + LETTERS[i] + '</span><span>' + esc(o) + '</span></button>';
+    }).join('') + '</div>';
+  } else {
+    var fv = answered && r.pick != null ? ' value="' + esc(String(r.pick)) + '"' : '';
+    var fdis = answered ? ' disabled' : '';
+    body += '<div class="fill-row"><input id="fillInput" type="text"' + fv + ' placeholder="输入答案后提交" autocomplete="off"' + fdis + '><button class="btn btn-primary" id="btnSubmit"' + fdis + '>提交</button></div>';
+  }
+  var explHtml = '';
+  if (answered) {
+    var ansText = q.type === 'mcq' ? LETTERS[q.ans] + '．' + q.opts[q.ans] : q.ans;
+    explHtml = '<div class="exp-label ' + (ok ? 'ok' : 'bad') + '">' + (ok ? '回答正确' : '回答错误') + '</div>' +
+      '<div><b>正确答案：</b>' + esc(ansText) + '</div>' +
+      (q.expl ? '<div style="margin-top:4px">' + esc(q.expl) + '</div>' : '');
+  }
+  body += '<div class="expl' + (answered ? ' on ' + (ok ? 'ok' : 'bad') : '') + '" id="expl">' + explHtml + '</div>';
+  foot = '<div class="quiz-actions">' +
+    '<button class="btn btn-line" id="btnPrev"' + (qidx === 0 ? ' disabled' : '') + '>上一题</button>' +
+    '<button class="btn btn-ghost" id="btnSkip">跳过</button>' +
+    '<button class="btn btn-primary" id="btnNext"' + (answered ? '' : ' disabled') + '>下一题</button>' +
+    '</div>';
+  el('quizBody').innerHTML = '<div class="card q-card">' + head + body + foot + '</div>';
+  judged = answered;
+  var bf = el('btnFav');
+  bf.addEventListener('click', function () {
+    var rr = rec[q.id] || {c: 0, w: 0, f: 0, last: 0};
+    rr.f = rr.f ? 0 : 1;
+    rec[q.id] = rr;
+    saveRecord(rec);
+    bf.classList.toggle('on', !!rr.f);
+    bf.querySelector('svg').setAttribute('fill', rr.f ? 'currentColor' : 'none');
+    toast(rr.f ? '已收藏' : '已取消收藏');
+  });
+  if (q.type === 'mcq') {
+    el('opts').querySelectorAll('.opt').forEach(function (b) {
+      b.addEventListener('click', function () { judgeMcq(q, parseInt(b.getAttribute('data-i'), 10)); });
+    });
+  } else {
+    el('btnSubmit').addEventListener('click', function () { judgeFillUi(q); });
+    el('fillInput').addEventListener('keydown', function (e) { if (e.key === 'Enter') judgeFillUi(q); });
+  }
+  var bp = el('btnPrev');
+  bp.addEventListener('click', function () { if (qidx > 0) { qidx--; judged = false; renderOne(); } });
+  el('btnSkip').addEventListener('click', function () { next(true); });
+  var bn = el('btnNext');
+  bn.addEventListener('click', function () { next(false); });
+  updateTopStat();
+}
+
+function judgeMcq(q, i) {
+  if (judged) return;
+  judged = true;
+  var ok = (i === q.ans);
+  var rr = rec[q.id];
+  if (!rr) { rr = {c: 0, w: 0, f: 0, last: 0}; rec[q.id] = rr; }
+  rr.pick = i;
+  recTouch(rec, q.id, ok);
+  saveRecord(rec);
+  var opts = el('opts');
+  opts.querySelectorAll('.opt').forEach(function (b) {
+    var bi = parseInt(b.getAttribute('data-i'), 10);
+    b.classList.add('dim');
+    if (bi === q.ans) b.classList.add('correct');
+    if (bi === i && !ok) b.classList.add('wrong');
+    b.disabled = true;
+  });
+  showExpl(q, ok, LETTERS[q.ans] + '．' + q.opts[q.ans]);
+  el('btnNext').disabled = false;
+  updateTopStat();
+}
+
+function judgeFillUi(q) {
+  if (judged) return;
+  var v = el('fillInput').value;
+  if (!norm(v)) { toast('请输入答案'); return; }
+  judged = true;
+  var ok = judgeFill(q, v);
+  var rr = rec[q.id];
+  if (!rr) { rr = {c: 0, w: 0, f: 0, last: 0}; rec[q.id] = rr; }
+  rr.pick = v;
+  recTouch(rec, q.id, ok);
+  saveRecord(rec);
+  showExpl(q, ok, q.ans);
+  el('btnNext').disabled = false;
+  updateTopStat();
+}
+
+function showExpl(q, ok, ansText) {
+  var e = el('expl');
+  e.className = 'expl on ' + (ok ? 'ok' : 'bad');
+  e.innerHTML = '<div class="exp-label ' + (ok ? 'ok' : 'bad') + '">' + (ok ? '回答正确' : '回答错误') + '</div>' +
+    '<div><b>正确答案：</b>' + esc(ansText) + '</div>' +
+    (q.expl ? '<div style="margin-top:4px">' + esc(q.expl) + '</div>' : '');
+}
+
+function next(skip) {
+  if (!skip && !judged) return;
+  qidx++;
+  if (qidx >= pool.length) {
+    var mode = qmode;
+    var done = pool.length;
+    var t = totals();
+    el('quizTopBar').innerHTML = '<span class="quiz-mode">' + esc(modeLabel(mode)) + '</span><span class="quiz-progress">完成</span>';
+    el('quizBody').innerHTML =
+      '<div class="card done-box"><div class="big">' + fmt(done) + '</div><p>' + (skip ? '本组练习结束' : '本组练习完成') + ' · 当前总正确率 ' + fmt(t.rate) + '%</p>' +
+      '<div style="display:flex;gap:10px;justify-content:center;flex-wrap:wrap">' +
+      '<button class="btn btn-amber" id="btnAgain">再练一组</button>' +
+      '<button class="btn btn-primary" id="btnBackHome2">返回首页</button></div></div>';
+    el('btnAgain').addEventListener('click', function () { location.hash = mode; });
+    el('btnBackHome2').addEventListener('click', function () { location.hash = 'home'; });
+    updateTopStat();
+    return;
+  }
+  judged = false;
+  renderOne();
+}
+
+/* ============ 知识框架 ============ */
+function renderKn() {
+  var chips = el('fwChips');
+  var body = el('fwBody');
+  if (!chips || !body) return;
+  var html = '<button class="chip' + (fwCh === 'all' ? ' on' : '') + '" onclick="fwCh=\'all\';renderKn()">全部</button>';
+  FRAMEWORK.forEach(function (f) {
+    html += '<button class="chip' + (fwCh === f.ch ? ' on' : '') + '" onclick="fwCh=' + f.ch + ';renderKn()">' + esc(CH[f.ch]) + '</button>';
+  });
+  chips.innerHTML = html;
+  var list = fwCh === 'all' ? FRAMEWORK : FRAMEWORK.filter(function (f) { return f.ch === fwCh; });
+  body.innerHTML = list.map(function (f) {
+    var s = chStat(f.ch);
+    var topics = f.topics.map(function (tp) {
+      return '<div class="fw-topic"><div class="fw-t">' + esc(tp.t) + '</div><ul class="fw-pts">' +
+        tp.pts.map(function (p) { return '<li>' + esc(p) + '</li>'; }).join('') + '</ul></div>';
+    }).join('');
+    return '<div class="card fw-card"><div class="fw-head">' +
+      chIcon(f.ch, true) +
+      '<div style="flex:1;min-width:0"><div class="fw-name">' + esc(f.name) + '</div><div class="fw-meta">' + f.topics.length + ' 个主题 · ' + fmt(s.n) + ' 题</div></div>' +
+      '<button class="btn btn-ghost btn-sm" onclick="location.hash=\'ch' + f.ch + '\'">进入本章刷题</button>' +
+      '</div><div class="fw-topics">' + topics + '</div></div>';
+  }).join('');
+}
+
+/* ============ 复习资料（Word 内容页内版） ============ */
+function renderDoc() {
+  var body = el('docBody');
+  if (!body) return;
+  var d;
+  try { d = JSON.parse(el('docData').textContent); }
+  catch (e) { body.innerHTML = '<div class="card"><h2>复习资料</h2><p class="hint">内容加载失败，请刷新重试。</p></div>'; return; }
+  var html = '';
+  html += '<div class="card doc-toolbar"><div class="hint">Word 复习资料完整内容已内置本页 · 点击下方条目快速定位</div><div class="chips">' +
+    '<button class="chip" onclick="document.getElementById(\'docKn\').scrollIntoView({behavior:\'smooth\'})">知识点梳理</button>' +
+    '<button class="chip" onclick="document.getElementById(\'docQb\').scrollIntoView({behavior:\'smooth\'})">题库（' + DATA.length + ' 题）</button>' +
+    '<button class="chip" onclick="document.getElementById(\'docPart\').scrollIntoView({behavior:\'smooth\'})">大题精讲</button>' +
+    d.kn.map(function (ch) {
+      return '<button class="chip" onclick="document.getElementById(\'knCh' + ch.ch + '\').scrollIntoView({behavior:\'smooth\'})">' + esc(ch.title) + '</button>';
+    }).join('') +
+    '</div></div>';
+
+  html += '<div class="doc-sec" id="docKn"><h2>一、知识点梳理</h2>';
+  d.kn.forEach(function (ch) {
+    var blocks = ch.blocks.map(function (b) {
+      if (b[0] === 'table') {
+        var rows = b[1].map(function (r, i) {
+          return '<tr>' + r.map(function (c) {
+            return (i === 0 ? '<th>' : '<td>') + esc(c) + (i === 0 ? '</th>' : '</td>');
+          }).join('') + '</tr>';
+        }).join('');
+        return '<table class="doc-table">' + rows + '</table>';
+      }
+      if (b[0] === 'note') return '<div class="doc-note">' + esc(b[1]) + '</div>';
+      if (b[0] === 'b') return '<p class="doc-b">' + esc(b[1]) + '</p>';
+      return '<p class="doc-p">' + esc(b[1]) + '</p>';
+    }).join('');
+    html += '<div class="doc-ch" id="knCh' + ch.ch + '"><h3>' + esc(ch.title) + '</h3>' + blocks + '</div>';
+  });
+  html += '</div>';
+
+  html += '<div class="doc-sec" id="docQb"><h2>二、题库（' + DATA.length + ' 题）</h2>';
+  CH_ORDER.forEach(function (ch) {
+    var qs = DATA.filter(function (q) { return q.ch === ch; });
+    html += '<div class="doc-ch" id="qbCh' + ch + '"><h3>' + esc(CH[ch]) + '（' + qs.length + ' 题）</h3>';
+    qs.forEach(function (q) {
+      var opts = q.type === 'mcq'
+        ? '<div class="doc-q-opts">' + q.opts.map(function (o, i) { return '<div>' + LETTERS[i] + '. ' + esc(o) + '</div>'; }).join('') + '</div>'
+        : '';
+      html += '<div class="doc-q"><div class="doc-q-head"><span class="doc-q-num">q' + q.id + '</span><span class="doc-q-type">' + (q.type === 'mcq' ? '单选' : '填空') + '</span></div>' +
+        '<div class="doc-q-stem">' + esc(q.q) + '</div>' + opts +
+        '<div class="doc-q-ans">答案：<b>' + (q.type === 'mcq' ? LETTERS[q.ans] : esc(q.ans)) + '</b></div>' +
+        '<div class="doc-q-expl">解析：' + esc(q.expl) + '</div></div>';
+    });
+    html += '</div>';
+  });
+  html += '</div>';
+
+  html += '<div class="doc-sec" id="docPart"><h2>三、课后作业同型大题精讲</h2>';
+  d.part3.forEach(function (part) {
+    html += '<div class="doc-ch"><h3>' + esc(part.title) + '</h3>';
+    part.items.forEach(function (it) {
+      html += '<div class="part-item"><div class="pq">' + esc(it.q) + '</div><div class="pa">' + esc(it.a) + '</div></div>';
+    });
+    html += '</div>';
+  });
+  html += '<div class="card doc-dl"><p class="hint">如需离线 Word 文件（.docx），可点击下载：</p>' +
+    '<a class="btn btn-ghost btn-sm" href="电力电子技术-复习资料.docx">下载 Word 版</a></div></div>';
+  body.innerHTML = html;
+}
+
+/* ============ 速记卡片 ============ */
+function renderCards() {
+  if (!cardPool.length) {
+    el('cardsBody').innerHTML =
+      '<div class="card"><h2>速记卡片</h2><p class="hint">选择章节后开始：正面看题干，点击卡片翻面查看答案与解析。</p>' +
+      '<div class="chips" id="cardChips"></div>' +
+      '<button class="btn btn-primary" id="btnStartCards">开始速记</button></div>';
+    var chips = el('cardChips');
+    ['all'].concat(CH_ORDER).forEach(function (c) {
+      var b = document.createElement('button');
+      b.className = 'chip' + (c === cardCh ? ' on' : '');
+      b.textContent = c === 'all' ? '全部章节' : CH[c];
+      b.addEventListener('click', function () { cardCh = c; renderCards(); });
+      chips.appendChild(b);
+    });
+    el('btnStartCards').addEventListener('click', function () {
+      var qs = cardCh === 'all' ? DATA.slice() : DATA.filter(function (q) { return q.ch === cardCh; });
+      cardPool = shuffle(qs.map(function (q) { return q.id; }));
+      cardIdx = 0; cardFlipped = false;
+      renderCardOne();
+    });
+    return;
+  }
+  renderCardOne();
+}
+
+function renderCardOne() {
+  var q = BY_ID[cardPool[cardIdx]];
+  if (!q) { cardPool = []; renderCards(); return; }
+  el('cardsBody').innerHTML =
+    '<div class="card-stage" id="cardStage"><div class="flashcard' + (cardFlipped ? ' flip' : '') + '" id="fc">' +
+    '<div class="fc-face"><div class="fc-tag">' + esc(CH[q.ch]) + ' · ' + esc(q.id.slice(1)) + ' · ' + (q.type === 'mcq' ? '单选' : '填空') + ' · 点击翻面</div>' +
+    '<div class="fc-q">' + esc(q.q) + '</div>' +
+    (q.type === 'mcq' ? '<div class="fc-opts">' + q.opts.map(function (o, i) { return '<div>' + LETTERS[i] + '．' + esc(o) + '</div>'; }).join('') + '</div>' : '') +
+    '</div>' +
+    '<div class="fc-face fc-back"><div class="fc-tag">答案与解析</div>' +
+    '<div class="fc-a">' + (q.type === 'mcq' ? LETTERS[q.ans] + '．' + q.opts[q.ans] : q.ans) + '</div>' +
+    '<div class="fc-e">' + esc(q.expl) + '</div></div>' +
+    '</div></div>' +
+    '<div class="fc-nav"><button class="btn btn-line" id="fcPrev"' + (cardIdx === 0 ? ' disabled' : '') + '>上一张</button>' +
+    '<span class="fc-count">' + fmt(cardIdx + 1) + ' / ' + fmt(cardPool.length) + '</span>' +
+    '<button class="btn btn-primary" id="fcNext">下一张</button></div>';
+  var fc = el('fc');
+  fc.addEventListener('click', function () { cardFlipped = !cardFlipped; fc.classList.toggle('flip', cardFlipped); });
+  el('fcPrev').addEventListener('click', function () { if (cardIdx > 0) { cardIdx--; cardFlipped = false; renderCardOne(); } });
+  el('fcNext').addEventListener('click', function () {
+    if (cardIdx < cardPool.length - 1) { cardIdx++; cardFlipped = false; renderCardOne(); }
+    else { cardPool = []; toast('本轮速记完成'); renderCards(); }
+  });
+}
+
+/* ============ 统计 ============ */
+function renderStats() {
+  var t = totals();
+  el('statTotal').textContent = fmt(t.c + t.w);
+  el('statCorrect').textContent = fmt(t.c);
+  el('statRate').textContent = fmt(t.rate) + '%';
+  el('statWrong').textContent = fmt(t.wrong);
+  // 各章
+  var chHtml = CH_ORDER.map(function (ch) {
+    var s = chStat(ch);
+    return '<div class="bar-row"><span>' + esc(CH[ch]) + '</span><div class="bar-track"><div class="bar-fill" style="width:' + s.rate + '%"></div></div><span class="bar-val">' + fmt(s.rate) + '%</span></div>';
+  }).join('');
+  el('statsCh').innerHTML = chHtml;
+  // 近7天
+  var days = days7();
+  var d = parseObj(safeGet(DAY_KEY) || '');
+  var max = 1;
+  days.forEach(function (k) { var v = (d[k] ? (d[k].c + d[k].w) : 0); if (v > max) max = v; });
+  var dayHtml = days.map(function (k) {
+    var v = d[k] ? (d[k].c + d[k].w) : 0;
+    var h = v ? Math.round(v * 100 / max) : 0;
+    return '<div class="day"><i style="height:' + Math.max(h, 2) + 'px" class="' + (v ? '' : 'none') + '"></i>' + k.slice(5) + '</div>';
+  }).join('');
+  el('statsDays').innerHTML = dayHtml;
+}
+
+/* ============ 重置（危险操作） ============ */
+function resetAll() {
+  if (window.confirm('确定清空全部做题记录、收藏与统计吗？此操作不可恢复。')) {
+    safeDel(REC_KEY); safeDel(DAY_KEY);
+    rec = {};
+    toast('记录已清空');
+    route();
+  }
+}
+
+/* ============ 初始化 ============ */
+document.addEventListener('DOMContentLoaded', function () {
+  el('btnReset').addEventListener('click', resetAll);
+  document.querySelectorAll('.tab').forEach(function (tb) {
+    tb.addEventListener('click', function () { location.hash = tb.getAttribute('data-view'); });
+  });
+  // 移动端底部 TabBar
+  document.querySelectorAll('.tb-item').forEach(function (b) {
+    b.addEventListener('click', function () {
+      var t = b.getAttribute('data-tb');
+      if (t === 'ch') { openChSheet(); return; }
+      location.hash = t;
+    });
+  });
+  el('chMask').addEventListener('click', closeChSheet);
+  el('chSheetClose').addEventListener('click', closeChSheet);
+  // 移动端/小屏打开即进入随机刷题
+  if (isMobileLike() && (!location.hash || location.hash === '#home' || location.hash === '#/home')) {
+    location.hash = 'random';
+  }
+  route();
+});
+
+</script>
+</body>
+</html>
