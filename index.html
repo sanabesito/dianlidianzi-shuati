@@ -158,6 +158,45 @@ main{max-width:960px;margin:0 auto;padding:16px 16px 48px}
 .expl .exp-label.bad{color:var(--bad)}
 .quiz-actions{display:flex;gap:10px;margin-top:14px;flex-wrap:wrap}
 .quiz-actions .btn{flex:1 1 auto}
+/* 跳题：顶栏进度按钮 + 题号面板 */
+.q-jump{display:inline-flex;align-items:center;gap:5px;min-height:34px;padding:5px 12px;border:1px solid var(--line);border-radius:18px;background:var(--card);color:var(--ink);font-size:13px;font-weight:600}
+.q-jump:hover{border-color:var(--accent);color:var(--accent)}
+.q-jump svg{width:14px;height:14px;color:var(--muted)}
+.q-jump b{font-family:ui-monospace,SFMono-Regular,Consolas,monospace;font-weight:700}
+.q-mask{display:none;position:fixed;inset:0;z-index:55;background:rgba(10,30,50,.38);opacity:0;transition:opacity .2s}
+.q-mask.show{display:block;opacity:1}
+.q-sheet{position:fixed;left:50%;bottom:0;z-index:60;width:100%;max-width:560px;background:var(--card);border-radius:16px 16px 0 0;transform:translate(-50%,105%);transition:transform .22s ease;max-height:72vh;overflow-y:auto;padding-bottom:env(safe-area-inset-bottom,0);box-shadow:0 -6px 24px rgba(14,74,126,.18);visibility:hidden}
+.q-sheet.show{transform:translate(-50%,0);visibility:visible}
+.q-sheet-head{display:flex;align-items:center;justify-content:space-between;padding:14px 16px 6px;font-weight:700;font-size:15px}
+.q-sheet-head small{display:block;font-weight:400;font-size:11.5px;color:var(--muted);margin-top:2px}
+.q-sheet-close{min-width:44px;min-height:44px;display:flex;align-items:center;justify-content:center;color:var(--muted)}
+.q-grid{display:grid;grid-template-columns:repeat(6,1fr);gap:8px;padding:8px 16px 20px}
+.q-jumprow{display:flex;gap:8px;padding:2px 16px 8px}
+.q-jumprow input{flex:1 1 auto;min-width:0;height:44px;padding:0 12px;font-size:16px;border:1px solid var(--line);border-radius:9px;outline:none;background:#fff;color:var(--ink)}
+.q-jumprow input:focus{border-color:var(--accent)}
+.q-jumpgo{flex:0 0 auto;min-width:76px;min-height:44px;border-radius:9px;background:var(--accent);color:#fff;font-size:14px;font-weight:700}
+.q-jumpgo:active{opacity:.9}
+@media (max-width:520px){.q-grid{grid-template-columns:repeat(5,1fr);gap:6px;padding:8px 12px 20px}}
+.q-cell{min-height:44px;border:1px solid var(--line);border-radius:9px;background:#fff;font-size:13px;font-weight:600;color:var(--ink);display:flex;align-items:center;justify-content:center;min-width:0;transition:background .12s}
+.q-cell.okb{background:var(--ok-soft);border-color:#B7E3CC;color:var(--ok)}
+.q-cell.badb{background:var(--bad-soft);border-color:#F0C2C2;color:var(--bad)}
+.q-cell.cur{background:var(--accent);border-color:var(--accent);color:#fff;box-shadow:0 2px 8px rgba(14,74,126,.28)}
+.q-cell:active{transform:scale(.96)}
+.q-legend{display:flex;gap:14px;padding:0 16px 12px;font-size:11.5px;color:var(--muted);flex-wrap:wrap}
+.q-legend span{display:inline-flex;align-items:center;gap:5px}
+.q-legend i{width:10px;height:10px;border-radius:3px;border:1px solid var(--line);background:#fff}
+.q-legend i.okb{background:var(--ok-soft);border-color:var(--ok)}
+.q-legend i.badb{background:var(--bad-soft);border-color:var(--bad)}
+.q-legend i.cur{background:var(--accent);border-color:var(--accent)}
+@media (max-width:860px){
+  .q-jump{min-height:44px;padding:8px 14px;font-size:13.5px}
+  .q-jump svg{width:15px;height:15px}
+  .q-sheet{max-height:76vh}
+  .q-grid{grid-template-columns:repeat(5,1fr)}
+}
+@media (max-width:400px){
+  .q-grid{grid-template-columns:repeat(5,1fr);gap:5px;padding:8px 10px 18px}
+}
 .done-box{text-align:center;padding:28px 18px}
 .done-box .big{font-size:44px;font-weight:800;color:var(--accent)}
 .done-box p{color:var(--muted);margin:6px 0 16px}
@@ -421,6 +460,17 @@ main{max-width:960px;margin:0 auto;padding:16px 16px 48px}
 <div class="ch-sheet" id="chSheet">
   <div class="ch-sheet-head"><span>选择章节刷题</span><button class="ch-sheet-close" id="chSheetClose" aria-label="关闭"><svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M18 6 6 18"/><path d="m6 6 12 12"/></svg></button></div>
   <div class="ch-sheet-grid" id="chSheetGrid"></div>
+</div>
+
+<div class="q-mask" id="qMask"></div>
+<div class="q-sheet" id="qSheet" role="dialog" aria-label="选择题目">
+  <div class="q-sheet-head">
+    <div><span>跳到第几题</span><small id="qSheetSub">选一个题号直接跳转</small></div>
+    <button class="q-sheet-close" id="qSheetClose" aria-label="关闭"><svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M18 6 6 18"/><path d="m6 6 12 12"/></svg></button>
+  </div>
+  <div class="q-jumprow"><input id="qJumpInput" type="number" inputmode="numeric" min="1" step="1" placeholder="直接输入题号" aria-label="输入题号"><button class="q-jumpgo" id="qJumpGo">跳转</button></div>
+  <div class="q-legend"><span><i></i>未做</span><span><i class="okb"></i>答对</span><span><i class="badb"></i>答错</span><span><i class="cur"></i>当前</span></div>
+  <div class="q-grid" id="qSheetGrid"></div>
 </div>
 
 <div class="footer">
@@ -714,6 +764,47 @@ function isMobileLike() {
   return /Android|iPhone|iPad|iPod|Mobile|MicroMessenger|Opera Mini/i.test(navigator.userAgent) || window.innerWidth <= 860;
 }
 
+/* ============ 跳题面板（选择第几题） ============ */
+function openQSheet() {
+  if (!pool.length) return;
+  var g = el('qSheetGrid');
+  var html = '';
+  pool.forEach(function (id, i) {
+    var r = rec[id] || {};
+    var done = ((r.c || 0) + (r.w || 0)) > 0;
+    var ok = done ? ((r.lastOk != null) ? !!r.lastOk : (r.w === 0)) : false;
+    var cls = (i === qidx) ? ' cur' : (done ? (ok ? ' okb' : ' badb') : '');
+    html += '<button class="q-cell' + cls + '" data-i="' + i + '" aria-label="第' + (i + 1) + '题">' + (i + 1) + '</button>';
+  });
+  g.innerHTML = html;
+  g.querySelectorAll('.q-cell').forEach(function (b) {
+    b.addEventListener('click', function () { jumpTo(parseInt(b.getAttribute('data-i'), 10)); });
+  });
+  el('qSheetSub').textContent = '共 ' + fmt(pool.length) + ' 题 · 当前第 ' + fmt(qidx + 1) + ' 题';
+  el('qJumpInput').value = '';
+  el('qJumpInput').placeholder = '直接输入题号（1~' + pool.length + '）';
+  el('qMask').classList.add('show');
+  el('qSheet').classList.add('show');
+}
+function closeQSheet() {
+  el('qMask').classList.remove('show');
+  el('qSheet').classList.remove('show');
+}
+function jumpTo(i) {
+  closeQSheet();
+  if (i < 0 || i >= pool.length) { toast('题号超出范围'); return; }
+  qidx = i;
+  judged = false;
+  if (qmode.indexOf('ch') === 0) modePos[qmode] = qidx;
+  renderOne();
+  window.scrollTo(0, 0);
+}
+function jumpByInput() {
+  var v = parseInt((el('qJumpInput') || {}).value, 10);
+  if (!v || isNaN(v)) { toast('请输入题号'); return; }
+  jumpTo(v - 1);
+}
+
 function route() {
   var h = (location.hash || '#home').replace(/^#/, '').replace(/^\//, '');
   if (h.indexOf('ch') === 0 && CH_ORDER.indexOf(parseInt(h.slice(2), 10)) >= 0) {
@@ -825,7 +916,7 @@ function renderQuiz() {
 function renderOne() {
   el('quizTopBar').innerHTML =
     '<span class="quiz-mode">' + esc(modeLabel(qmode)) + '</span>' +
-    '<span class="quiz-progress">' + fmt(qidx + 1) + ' / ' + fmt(pool.length) + '</span>';
+    '<button class="q-jump" id="btnJump" title="选择第几题"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M4 7h9"/><path d="M4 12h7"/><path d="M4 17h9"/><path d="m16 5 2.5 2-2.5 2"/><path d="M18.5 7H12"/></svg>第 <b>' + fmt(qidx + 1) + '</b> / ' + fmt(pool.length) + ' 题</button>';
   var q = BY_ID[pool[qidx]];
   if (!q) { renderQuiz(); return; }
   var r = rec[q.id] || {};
@@ -865,6 +956,7 @@ function renderOne() {
     '</div>';
   el('quizBody').innerHTML = '<div class="card q-card">' + head + body + foot + '</div>';
   judged = answered;
+  el('btnJump').addEventListener('click', openQSheet);
   var bf = el('btnFav');
   bf.addEventListener('click', function () {
     var rr = rec[q.id] || {c: 0, w: 0, f: 0, last: 0};
@@ -1153,6 +1245,12 @@ document.addEventListener('DOMContentLoaded', function () {
   });
   el('chMask').addEventListener('click', closeChSheet);
   el('chSheetClose').addEventListener('click', closeChSheet);
+  // 跳题面板
+  el('qMask').addEventListener('click', closeQSheet);
+  el('qSheetClose').addEventListener('click', closeQSheet);
+  el('qJumpGo').addEventListener('click', jumpByInput);
+  el('qJumpInput').addEventListener('keydown', function (e) { if (e.key === 'Enter') jumpByInput(); });
+  document.addEventListener('keydown', function (e) { if (e.key === 'Escape') closeQSheet(); });
   // 移动端/小屏打开即进入随机刷题
   if (isMobileLike() && (!location.hash || location.hash === '#home' || location.hash === '#/home')) {
     location.hash = 'random';
