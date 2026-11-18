@@ -130,7 +130,8 @@ main{max-width:960px;margin:0 auto;padding:16px 16px 48px}
 .quiz-mode{display:inline-flex;align-items:center;gap:6px;background:var(--accent-soft);color:var(--accent);padding:6px 12px;border-radius:20px;font-size:13px;font-weight:600}
 .quiz-progress{font-size:13px;color:var(--muted)}
 .q-card{padding:20px}
-.q-head{display:flex;justify-content:space-between;align-items:center;margin-bottom:10px}
+.q-head{display:flex;justify-content:space-between;align-items:center;gap:8px;margin-bottom:10px}
+.q-wcnt{font-size:12px;font-weight:700;color:var(--bad);background:var(--bad-soft);border:1px solid rgba(0,0,0,.04);padding:3px 9px;border-radius:6px;margin-left:auto;white-space:nowrap}
 .q-tag{font-size:12px;font-weight:700;color:var(--accent);background:var(--accent-soft);padding:3px 10px;border-radius:6px}
 .q-fav{width:38px;height:38px;border-radius:9px;border:1px solid var(--line);display:flex;align-items:center;justify-content:center;color:var(--muted)}
 .q-fav.on{color:#fff;background:var(--copper);border-color:var(--copper)}
@@ -645,6 +646,7 @@ var qidx = 0;               // 当前题目在 pool 中下标
 var poolMode = '';          // 当前 pool 所属模式（区分章节切换）
 var modePos = {};           // 各章节独立进度：chN -> qidx
 var judged = false;         // 当前题是否已判分
+var revealWrong = {};       // 错题本本次进入后已作答的题（用于控制何时显示答案）
 var qAnswer = '';           // 当前判分结果 ok/bad
 var cardCh = 'all';         // 速记卡片章节
 var cardPool = [];
@@ -894,6 +896,7 @@ function renderQuiz() {
       return;
     }
     judged = false;
+    revealWrong = {};
     renderOne();
     return;
   }
@@ -921,15 +924,18 @@ function renderOne() {
   if (!q) { renderQuiz(); return; }
   var r = rec[q.id] || {};
   var answered = ((r.c || 0) + (r.w || 0)) > 0;
-  var ok = answered ? ((r.lastOk != null) ? !!r.lastOk : (r.w === 0)) : false;
-  var head = '<div class="q-head"><span class="q-tag">' + esc(q.id.slice(1)) + ' · ' + (q.type === 'mcq' ? '单选' : '填空') + '</span>' +
+  // 错题本：刚进入时不显示答案，只有本次已作答过的题才揭示
+  var shown = answered && (qmode !== 'wrong' || !!revealWrong[q.id]);
+  var ok = shown ? ((r.lastOk != null) ? !!r.lastOk : (r.w === 0)) : false;
+  var wBadge = (qmode === 'wrong' && r.w > 0) ? '<span class="q-wcnt">答错 <b>' + fmt(r.w) + '</b> 次</span>' : '';
+  var head = '<div class="q-head"><span class="q-tag">' + esc(q.id.slice(1)) + ' · ' + (q.type === 'mcq' ? '单选' : '填空') + '</span>' + wBadge +
     '<button class="q-fav' + (r.f ? ' on' : '') + '" id="btnFav" title="收藏"><svg viewBox="0 0 24 24" fill="' + (r.f ? 'currentColor' : 'none') + '" stroke="currentColor" stroke-width="2"><path d="M12 2l3.1 6.3 6.9 1-5 4.9 1.2 6.9-6.2-3.3L5.8 21.1 7 14.2l-5-4.9 6.9-1z"/></svg></button></div>';
   var body = '<div class="q-text">' + esc(q.q) + '</div>';
   var foot = '';
   if (q.type === 'mcq') {
     body += '<div class="opts" id="opts">' + q.opts.map(function (o, i) {
-      var cls = '', dis = answered ? ' disabled' : '';
-      if (answered) {
+      var cls = '', dis = shown ? ' disabled' : '';
+      if (shown) {
         if (i === q.ans) cls += ' correct';
         else if (r.pick != null && i === r.pick) cls += ' wrong';
         else cls += ' dim';
@@ -937,25 +943,25 @@ function renderOne() {
       return '<button class="opt' + cls + '" data-i="' + i + '"' + dis + '><span class="key">' + LETTERS[i] + '</span><span>' + esc(o) + '</span></button>';
     }).join('') + '</div>';
   } else {
-    var fv = answered && r.pick != null ? ' value="' + esc(String(r.pick)) + '"' : '';
-    var fdis = answered ? ' disabled' : '';
+    var fv = shown && r.pick != null ? ' value="' + esc(String(r.pick)) + '"' : '';
+    var fdis = shown ? ' disabled' : '';
     body += '<div class="fill-row"><input id="fillInput" type="text"' + fv + ' placeholder="输入答案后提交" autocomplete="off"' + fdis + '><button class="btn btn-primary" id="btnSubmit"' + fdis + '>提交</button></div>';
   }
   var explHtml = '';
-  if (answered) {
+  if (shown) {
     var ansText = q.type === 'mcq' ? LETTERS[q.ans] + '．' + q.opts[q.ans] : q.ans;
     explHtml = '<div class="exp-label ' + (ok ? 'ok' : 'bad') + '">' + (ok ? '回答正确' : '回答错误') + '</div>' +
       '<div><b>正确答案：</b>' + esc(ansText) + '</div>' +
       (q.expl ? '<div style="margin-top:4px">' + esc(q.expl) + '</div>' : '');
   }
-  body += '<div class="expl' + (answered ? ' on ' + (ok ? 'ok' : 'bad') : '') + '" id="expl">' + explHtml + '</div>';
+  body += '<div class="expl' + (shown ? ' on ' + (ok ? 'ok' : 'bad') : '') + '" id="expl">' + explHtml + '</div>';
   foot = '<div class="quiz-actions">' +
     '<button class="btn btn-line" id="btnPrev"' + (qidx === 0 ? ' disabled' : '') + '>上一题</button>' +
     '<button class="btn btn-ghost" id="btnSkip">跳过</button>' +
-    '<button class="btn btn-primary" id="btnNext"' + (answered ? '' : ' disabled') + '>下一题</button>' +
+    '<button class="btn btn-primary" id="btnNext"' + (shown ? '' : ' disabled') + '>下一题</button>' +
     '</div>';
   el('quizBody').innerHTML = '<div class="card q-card">' + head + body + foot + '</div>';
-  judged = answered;
+  judged = shown;
   el('btnJump').addEventListener('click', openQSheet);
   var bf = el('btnFav');
   bf.addEventListener('click', function () {
@@ -983,6 +989,12 @@ function renderOne() {
   updateTopStat();
 }
 
+function refreshWrongBadge(w) {
+  var b = document.querySelector('.q-wcnt');
+  if (!b) return;
+  b.innerHTML = '答错 <b>' + fmt(w || 0) + '</b> 次';
+}
+
 function judgeMcq(q, i) {
   if (judged) return;
   judged = true;
@@ -992,6 +1004,8 @@ function judgeMcq(q, i) {
   rr.pick = i;
   recTouch(rec, q.id, ok);
   saveRecord(rec);
+  if (qmode === 'wrong') revealWrong[q.id] = true;
+  refreshWrongBadge(rr.w);
   var opts = el('opts');
   opts.querySelectorAll('.opt').forEach(function (b) {
     var bi = parseInt(b.getAttribute('data-i'), 10);
@@ -1016,6 +1030,8 @@ function judgeFillUi(q) {
   rr.pick = v;
   recTouch(rec, q.id, ok);
   saveRecord(rec);
+  if (qmode === 'wrong') revealWrong[q.id] = true;
+  refreshWrongBadge(rr.w);
   showExpl(q, ok, q.ans);
   el('btnNext').disabled = false;
   updateTopStat();
